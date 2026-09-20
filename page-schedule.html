@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e6fd9">
+<title>Schedule · Self Learners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --primary:#1e6fd9; --primary-dark:#1857ab; --primary-soft:#e8f1fc;
+    --bg:#f7f8fa; --surface:#ffffff; --surface-alt:#f1f3f7;
+    --border:#e3e6ec; --border-strong:#cfd4dd;
+    --text:#1a1d23; --text-secondary:#5a6472; --text-muted:#8b95a5;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+    --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+    --shadow-md:0 2px 8px rgba(16,24,40,.08);
+  }
+  html, body { -webkit-text-size-adjust:100%; }
+  body {
+    font:400 14px/1.5 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+
+  .page {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 16px;
+  }
+
+  /* ---------- Now card ---------- */
+  .now {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--primary-soft);
+    border-radius: var(--r-md);
+    margin-bottom: 12px;
+  }
+  .now-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: .5; transform: scale(.85); }
+  }
+  .now-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .now-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+  .now-activity {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .now-remain {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Meta ---------- */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 0 4px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .meta b {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .meta .spacer { flex: 1; }
+
+  /* ---------- Timeline ---------- */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    line-height: 1.4;
+    transition: background .15s;
+  }
+  .row .srno {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .row .body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .row .subject {
+    font-weight: 500;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row .time {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .row .duration {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    padding: 3px 8px;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+  }
+
+  /* States */
+  .row.done .subject {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border-strong);
+  }
+  .row.done .duration {
+    background: transparent;
+    border: 1px solid var(--border);
+  }
+  .row.current {
+    background: var(--primary-soft);
+  }
+  .row.current .subject {
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+  .row.current .duration {
+    background: var(--primary);
+    color: #fff;
+  }
+  .row.current .srno,
+  .row.current .time {
+    color: var(--primary-dark);
+  }
+  .row.break-row .subject {
+    color: var(--text-muted);
+  }
+  .row.break-row .duration {
+    background: transparent;
+    border: 1px dashed var(--border);
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .footer b {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .footer .spacer { flex: 1; }
+
+  /* ---------- States ---------- */
+  .state {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .state.error { color: #c8352e; }
+
+  @media (max-width: 400px) {
+    body { padding: 12px; }
+    .card { padding: 12px; }
+    .row { padding: 9px 10px; gap: 8px; }
+    .row .duration { padding: 2px 6px; }
+    .now { padding: 12px 14px; }
+    .now-remain { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="card">
+
+    <div class="now">
+      <span class="now-dot"></span>
+      <div class="now-body">
+        <div class="now-label">Now</div>
+        <div class="now-activity" id="currentActivity">Loading…</div>
+      </div>
+      <div class="now-remain" id="remainingTime">--:--</div>
+    </div>
+
+    <div class="meta">
+      <span>Done <b id="doneCount">0</b></span>
+      <span>Remaining <b id="remainingCount">0</b></span>
+      <span class="spacer"></span>
+      <span id="pkTime">--:-- --</span>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <div class="state">Loading from Google Sheets…</div>
+    </div>
+
+    <div class="footer">
+      <span>MPT in <b id="mptDays">--</b> days</span>
+      <span>Written in <b id="writtenDays">--</b> days</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  const S = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX16x-Eeh1mguy6se1B25x0hkRIzIme4pX71KlxpML_vZAD34mtlITIqFs8MCAVycXFFft82j1RZDc/pub?output=csv';
+
+  const $ = (id) => document.getElementById(id);
+  const timeline   = $('timeline');
+  const pkTime     = $('pkTime');
+  const curAct     = $('currentActivity');
+  const remainEl   = $('remainingTime');
+  const doneEl     = $('doneCount');
+  const remainCnt  = $('remainingCount');
+  const mptEl      = $('mptDays');
+  const writtenEl  = $('writtenDays');
+
+  let schedule = [];
+  let mptDate = null;
+  let writtenDate = null;
+  let tickHandle = null;
+  let isVisible = true;
+
+  /* ---------- Time helpers (PKT = UTC+5) ---------- */
+  function getPK() {
+    const now = new Date();
+    return new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 5 * 3600000);
+  }
+  function fmtClock(d) {
+    let h = d.getHours() % 12 || 12;
+    const ampm = d.getHours() >= 12 ? 'PM' : 'AM';
+    return h + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + ampm;
+  }
+  function parseSheetDate(str) {
+    if (!str) return null;
+    const parts = str.trim().split(' ');
+    if (parts.length !== 3) return null;
+    const months = {
+      jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
+      jul:6, aug:7, sep:8, oct:9, nov:10, dec:11
+    };
+    const mo = months[parts[1].toLowerCase().substring(0, 3)];
+    if (mo === undefined) return null;
+    return new Date(parseInt(parts[2], 10), mo, parseInt(parts[0], 10));
+  }
+  function daysUntil(target, now) {
+    if (!target) return '--';
+    const t = new Date(target); t.setHours(0,0,0,0);
+    const n = new Date(now);    n.setHours(0,0,0,0);
+    return Math.max(0, Math.ceil((t - n) / 86400000));
+  }
+
+  /* ---------- CSV parse (quoted-safe) ---------- */
+  function parseLine(line) {
+    const out = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') inQuotes = false;
+        else cur += ch;
+      } else {
+        if (ch === '"') inQuotes = true;
+        else if (ch === ',') { out.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+    }
+    out.push(cur.trim());
+    return out;
+  }
+
+  function parseScheduleCSV(text) {
+    const lines = text.split(/\r?\n/).filter((l) => l.trim() !== '');
+    if (lines.length < 2) return null;
+
+    const headers = parseLine(lines[0]).map((h) => h.toLowerCase());
+    const idx = {
+      subject:  headers.findIndex((h) => h.includes('activity') || h.includes('subject')),
+      from:     headers.findIndex((h) => h === 'from' || h === 'start'),
+      to:       headers.findIndex((h) => h === 'to'   || h === 'end'),
+      duration: headers.findIndex((h) => h === 'duration' || h === 'time'),
+      type:     headers.findIndex((h) => h === 'type' || h === 'activitytype'),
+      mpt:      headers.findIndex((h) => h.includes('mpt') || h.includes('test date')),
+      written:  headers.findIndex((h) => h.includes('written') || h.includes('exam'))
+    };
+
+    const rows = [];
+    let mptStr = null;
+    let writtenStr = null;
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = parseLine(lines[i]);
+      if (!cols.length || cols.every((c) => !c)) continue;
+
+      const subject = idx.subject >= 0 ? cols[idx.subject] : (cols[0] || '');
+      let from = (idx.from >= 0 ? cols[idx.from] : (cols[1] || '')).replace(/\s/g, '');
+      let to   = (idx.to   >= 0 ? cols[idx.to]   : (cols[2] || '')).replace(/\s/g, '');
+      let dur  = (idx.duration >= 0 ? cols[idx.duration] : (cols[3] || '')).replace(/\s/g, '');
+
+      if (idx.mpt >= 0 && cols[idx.mpt] && /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/.test(cols[idx.mpt])) {
+        mptStr = cols[idx.mpt];
+      }
+      if (idx.written >= 0 && cols[idx.written] && /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/.test(cols[idx.written])) {
+        writtenStr = cols[idx.written];
+      }
+
+      if (!from || !to || !subject) continue;
+      if (from.length === 4) from = '0' + from;
+      if (to.length === 4)   to   = '0' + to;
+      if (!/^\d{2}:\d{2}$/.test(from) || !/^\d{2}:\d{2}$/.test(to)) continue;
+
+      if (!dur || !/^\d+\s*[hm]/i.test(dur)) {
+        const diff = parseInt(to.split(':')[0], 10) - parseInt(from.split(':')[0], 10);
+        dur = (diff > 0 && diff <= 24) ? diff + 'h' : '1h';
+      }
+
+      let type = 'compulsory';
+      if (idx.type >= 0 && cols[idx.type]) {
+        const t = cols[idx.type].toLowerCase();
+        if (['core','compulsory','optional','mpt','review','break','sleep'].includes(t)) type = t;
+      } else {
+        const s = subject.toLowerCase();
+        if (s.includes('break') || s.includes('lunch') || s.includes('dinner')) type = 'break';
+        else if (s.includes('sleep') || s.includes('rest')) type = 'sleep';
+        else if (s.includes('mpt') || s.includes('practice')) type = 'mpt';
+        else if (s.includes('review')) type = 'review';
+        else if (s.includes('essay') || s.includes('precis')) type = 'core';
+        else if (s.includes('optional')) type = 'optional';
+      }
+
+      rows.push({ from, to, duration: dur, subject, type });
+    }
+
+    if (mptStr)     mptDate = parseSheetDate(mptStr);
+    if (writtenStr) writtenDate = parseSheetDate(writtenStr);
+
+    return rows.length ? rows : null;
+  }
+
+  /* ---------- Current item ---------- */
+  function getCurrent(now) {
+    const secs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    let idx = -1;
+    let remain = 0;
+
+    for (let i = 0; i < schedule.length; i++) {
+      const [fh, fm] = schedule[i].from.split(':').map(Number);
+      const [th, tm] = schedule[i].to.split(':').map(Number);
+      const f = fh * 3600 + fm * 60;
+      let t = th * 3600 + tm * 60;
+
+      if (t < f) {
+        if (secs >= f || secs < t) {
+          idx = i;
+          remain = secs >= f ? (86400 - secs) + t : t - secs;
+          break;
+        }
+      } else if (secs >= f && secs < t) {
+        idx = i;
+        remain = t - secs;
+        break;
+      }
+    }
+
+    if (idx === -1) {
+      let min = Infinity;
+      for (let i = 0; i < schedule.length; i++) {
+        const [h, m] = schedule[i].from.split(':').map(Number);
+        let diff = h * 3600 + m * 60 - secs;
+        if (diff < 0) diff += 86400;
+        if (diff < min) { min = diff; idx = i; }
+      }
+      remain = min;
+    }
+
+    return { idx: Math.max(0, idx), remain };
+  }
+
+  /* ---------- Render ---------- */
+  const TYPE_PREFIX = {
+    core:       '',
+    compulsory: '',
+    optional:   '',
+    mpt:        'MPT · ',
+    review:     'Review · ',
+    break:      '',
+    sleep:      ''
+  };
+
+  function render() {
+    if (!schedule.length) return;
+
+    const now = getPK();
+    pkTime.textContent = fmtClock(now);
+
+    if (mptDate)     mptEl.textContent     = daysUntil(mptDate, now);
+    if (writtenDate) writtenEl.textContent = daysUntil(writtenDate, now);
+
+    const { idx, remain } = getCurrent(now);
+    const item = schedule[idx] || { subject: 'No schedule', type: '' };
+
+    const prefix = TYPE_PREFIX[item.type] || '';
+    curAct.textContent = prefix + item.subject;
+
+    const m = Math.floor(remain / 60);
+    const s = remain % 60;
+    remainEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+
+    let html = '';
+    let done = 0;
+    let left = 0;
+
+    for (let i = 0; i < schedule.length; i++) {
+      const row = schedule[i];
+      const isBreak = row.type === 'break' || row.type === 'sleep';
+      let cls = 'row';
+      if (i < idx) { cls += ' done'; done++; }
+      else if (i === idx) { cls += ' current'; left++; }
+      else { left++; }
+      if (isBreak) cls += ' break-row';
+
+      html +=
+        '<div class="' + cls + '">' +
+          '<span class="srno">' + (i + 1) + '</span>' +
+          '<div class="body">' +
+            '<span class="subject">' + escapeHtml(row.subject) + '</span>' +
+            '<span class="time">' + row.from + ' – ' + row.to + '</span>' +
+          '</div>' +
+          '<span class="duration">' + escapeHtml(row.duration) + '</span>' +
+        '</div>';
+    }
+
+    timeline.innerHTML = html;
+    doneEl.textContent = done;
+    remainCnt.textContent = left;
+  }
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /* ---------- Load ---------- */
+  async function load() {
+    try {
+      const r = await fetch(S + (S.includes('?') ? '&' : '?') + '_t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const parsed = parseScheduleCSV(text);
+      if (!parsed || !parsed.length) throw new Error('No schedule rows');
+      schedule = parsed;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* ---------- Tick ---------- */
+  function startTick() {
+    if (tickHandle) clearInterval(tickHandle);
+    tickHandle = setInterval(() => {
+      if (isVisible && schedule.length) render();
+    }, 1000);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    isVisible = !document.hidden;
+    if (isVisible && schedule.length) render();
+  });
+
+  /* ---------- Init ---------- */
+  async function init() {
+    const ok = await load();
+    if (!ok) {
+      timeline.innerHTML = '<div class="state error">Failed to load schedule.<br>Check your connection and refresh.</div>';
+      curAct.textContent = 'Unavailable';
+      remainEl.textContent = '--:--';
+      return;
+    }
+    render();
+    startTick();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
