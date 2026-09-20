@@ -1,543 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="theme-color" content="#0ea5e9">
-    <title>Self Learners · CSS 2027 Hub</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e6fd9">
+<title>Self Learners · CSS 2027</title>
 
-    <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Self Learners">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Self Learners">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        :root {
-            --navy: #0a1e3f; --navy-light: #1a3a6b; --navy-soft: #e8eef7;
-            --black: #0f1419; --black-soft: #1c232b;
-            --yellow: #f5b800; --yellow-dark: #d99e00; --yellow-soft: #fff7dd;
-            --sky: #0ea5e9; --sky-dark: #0284c7; --sky-soft: #e0f2fe; --sky-light: #7dd3fc;
-            --bg: #f4f6fa; --card: #ffffff; --text: #0f1419;
-            --text-soft: #475569; --text-muted: #94a3b8;
-            --border: #e2e8f0;
-            --shadow-sm: 0 2px 6px rgba(10,30,63,.06);
-            --shadow-md: 0 8px 20px -6px rgba(10,30,63,.12);
-            --shadow-lg: 0 20px 40px -12px rgba(10,30,63,.18);
-            --radius-full: 9999px; --bottom-nav-h: 68px;
-        }
-        html { -webkit-text-size-adjust: 100%; }
-        body {
-            background: var(--bg);
-            background-image: radial-gradient(circle at 0% 0%, rgba(14,165,233,.06) 0%, transparent 40%),
-                              radial-gradient(circle at 100% 100%, rgba(10,30,63,.05) 0%, transparent 45%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            padding: 1rem .75rem 2rem;
-            color: var(--text);
-            display: flex; justify-content: center;
-            font-size: 15px; line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-        .app-wrapper { max-width: 1560px; width: 100%; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        .toggle-bar {
-            display: flex; gap: 4px; margin-bottom: 16px;
-            background: var(--card); padding: 6px;
-            border-radius: var(--radius-full);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            position: sticky; top: 8px; z-index: 100;
-            backdrop-filter: blur(12px);
-        }
-        .toggle-btn {
-            flex: 1; text-align: center;
-            padding: 10px 14px;
-            border-radius: var(--radius-full);
-            font-weight: 600; font-size: .82rem;
-            color: var(--text-soft); background: transparent;
-            border: none; cursor: pointer;
-            transition: all .22s cubic-bezier(.4,0,.2,1);
-            display: flex; align-items: center; justify-content: center;
-            gap: 6px; white-space: nowrap; min-height: 40px;
-        }
-        .toggle-btn .emoji { font-size: .95rem; }
-        .toggle-btn:hover { background: var(--sky-soft); color: var(--sky-dark); }
-        .toggle-btn.active {
-            background: linear-gradient(135deg, var(--sky), var(--sky-dark));
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(14,165,233,.35);
-        }
-        .toggle-btn.active .emoji { color: #fff; }
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --primary:#1e6fd9; --primary-dark:#1857ab; --primary-soft:#e8f1fc;
+    --bg:#f7f8fa; --surface:#ffffff; --surface-alt:#f1f3f7;
+    --border:#e3e6ec; --border-strong:#cfd4dd;
+    --text:#1a1d23; --text-secondary:#5a6472; --text-muted:#8b95a5;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+    --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+    --shadow-md:0 2px 8px rgba(16,24,40,.08);
+    --nav-h:64px;
+  }
+  html, body { -webkit-text-size-adjust:100%; }
+  body {
+    font:400 14px/1.5 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px);
+  }
+  button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 
-        .page-stage {
-            position: relative;
-            min-height: calc(100vh - 100px);
-            background: var(--card);
-            border-radius: 20px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-        .page-frame {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            border: none; background: transparent;
-            opacity: 0; pointer-events: none;
-            transition: opacity .25s ease;
-        }
-        .page-frame.active {
-            opacity: 1; pointer-events: auto;
-            position: relative;
-            min-height: calc(100vh - 100px);
-            height: auto;
-        }
-        .page-loading {
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 12px; padding: 4rem 2rem;
-            color: var(--text-soft); font-weight: 600;
-        }
-        .spinner {
-            width: 32px; height: 32px;
-            border: 3px solid var(--border);
-            border-top-color: var(--sky);
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+  .app {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-        .bottom-nav {
-            display: none;
-            position: fixed; bottom: 0; left: 0; right: 0;
-            height: var(--bottom-nav-h);
-            background: rgba(255,255,255,.96);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -8px 24px rgba(10,30,63,.08);
-            z-index: 9000;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .bottom-nav-inner {
-            display: flex; height: var(--bottom-nav-h);
-            justify-content: space-around; max-width: 720px; margin: 0 auto;
-        }
-        .bottom-nav-btn {
-            flex: 1; background: transparent; border: none;
-            cursor: pointer; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 3px; color: var(--text-muted);
-            font-family: inherit; font-weight: 600;
-            font-size: .63rem; padding: 8px 4px;
-            position: relative; transition: color .2s;
-        }
-        .bottom-nav-btn .nav-emoji {
-            font-size: 1.3rem; transition: transform .22s cubic-bezier(.34,1.56,.64,1);
-        }
-        .bottom-nav-btn.active { color: var(--sky-dark); }
-        .bottom-nav-btn.active .nav-emoji {
-            transform: translateY(-3px) scale(1.1);
-            filter: drop-shadow(0 3px 6px rgba(14,165,233,.4));
-        }
-        .bottom-nav-btn.active::before {
-            content: ''; position: absolute; top: 0;
-            left: 50%; transform: translateX(-50%);
-            width: 32px; height: 3px;
-            border-radius: 0 0 4px 4px;
-            background: var(--sky);
-        }
+  /* ---------- Top tabs (desktop pre-login) ---------- */
+  .top-tabs {
+    display: none;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 4px;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+  }
+  .top-tabs button {
+    flex: 1;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: background .15s, color .15s;
+  }
+  .top-tabs button:hover {
+    background: var(--surface-alt);
+    color: var(--text);
+  }
+  .top-tabs button.active {
+    background: var(--primary);
+    color: #fff;
+  }
 
-        /* ============================================================
-           NAV VISIBILITY RULES
-           ------------------------------------------------------------
-           Desktop (>768px):
-             - Pre-login:  Menu 1 top toggle bar visible
-             - Post-login: NO outer menu at all (Edu has its own toggle)
-           Mobile (<=768px):
-             - Pre-login:  Menu 1 bottom nav visible
-             - Post-login: Menu 2 bottom nav visible
-           ============================================================ */
+  /* ---------- Stage (iframe host) ---------- */
+  .stage {
+    position: relative;
+    min-height: calc(100dvh - var(--nav-h) - 40px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    display: none;
+  }
+  .frame.active {
+    display: block;
+    position: relative;
+    min-height: calc(100dvh - var(--nav-h) - 40px);
+    height: auto;
+  }
 
-        /* Hide Post-login top toggle bar — always. Edu has its own toggle. */
-        #topToggleBarPostLogin { display: none !important; }
+  /* ---------- Bottom nav (mobile) ---------- */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--nav-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    z-index: 900;
+  }
+  .bottom-nav-inner {
+    display: flex;
+    height: var(--nav-h);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .bottom-nav button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 4px;
+    min-height: 56px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color .15s;
+  }
+  .bottom-nav button .ico {
+    width: 22px; height: 22px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bottom-nav button:hover { color: var(--text-secondary); }
+  .bottom-nav button.active { color: var(--primary); font-weight: 600; }
 
-        @media (max-width: 768px) {
-            .toggle-bar { display: none !important; }
-            #bottomNavPreLogin { display: block; }
-            #bottomNavPostLogin { display: block; }
-            body { padding: .6rem .6rem calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 16px); }
-        }
+  /* ---------- Loader ---------- */
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    gap: 10px;
+  }
+  .spinner {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (min-width: 769px) {
-            /* Desktop: only Menu 1's top bar (pre-login) shows.
-               All bottom navs and Menu 2's top bar stay hidden. */
-            #bottomNavPreLogin { display: none !important; }
-            #bottomNavPostLogin { display: none !important; }
-        }
+  /* ---------- Responsive ---------- */
+  @media (min-width: 769px) {
+    body { padding: 16px; padding-bottom: 16px; }
+    .top-tabs { display: flex; }
+    .bottom-nav { display: none !important; }
+    .stage { min-height: calc(100dvh - 100px); }
+    .frame.active { min-height: calc(100dvh - 100px); }
+  }
+  @media (max-width: 768px) {
+    body { padding: 8px; padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 8px); }
+    .stage {
+      border-radius: var(--r-md);
+      min-height: calc(100dvh - var(--nav-h) - 24px);
+    }
+    .frame.active {
+      min-height: calc(100dvh - var(--nav-h) - 24px);
+    }
+  }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-        }
-    </style>
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
 </head>
 <body>
-<div class="app-wrapper">
-    <!-- MENU 1: Pre-login (top toggle bar — desktop only) -->
-    <div class="toggle-bar" id="topToggleBarPreLogin">
-        <button class="toggle-btn active" data-page="login" data-src="page-login.html">
-            <span class="emoji">🔐</span> Login
-        </button>
-        <button class="toggle-btn" data-page="schedule" data-src="page-schedule.html">
-            <span class="emoji">📅</span> Schedule
-        </button>
-        <button class="toggle-btn" data-page="eligibility" data-src="page-eligibility.html">
-            <span class="emoji">🛡️</span> Eligibility
-        </button>
-        <button class="toggle-btn" data-page="syllabus" data-src="page-syllabus.html">
-            <span class="emoji">📋</span> Syllabus
-        </button>
-    </div>
+<div class="app">
 
-    <!-- MENU 2: Post-login (top toggle bar) — HIDDEN VIA CSS, kept in DOM for logic -->
-    <div class="toggle-bar" id="topToggleBarPostLogin">
-        <button class="toggle-btn active" data-mode="mcq">
-            <span class="emoji">📝</span> MCQs
-        </button>
-        <button class="toggle-btn" data-mode="read">
-            <span class="emoji">📖</span> Solved
-        </button>
-        <button class="toggle-btn" data-mode="facts">
-            <span class="emoji">💡</span> Facts
-        </button>
-        <button class="toggle-btn" data-mode="papers">
-            <span class="emoji">📄</span> Papers
-        </button>
-    </div>
+  <!-- Pre-login top tabs (desktop) -->
+  <div class="top-tabs" id="topTabsPreLogin" role="tablist">
+    <button class="active" data-page="login"       data-src="page-login.html">Sign in</button>
+    <button            data-page="schedule"    data-src="page-schedule.html">Schedule</button>
+    <button            data-page="eligibility" data-src="page-eligibility.html">Eligibility</button>
+    <button            data-page="syllabus"    data-src="page-syllabus.html">Syllabus</button>
+  </div>
 
-    <div class="page-stage" id="pageStage"></div>
+  <!-- Stage: iframes mount here -->
+  <div class="stage" id="stage">
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <span>Loading…</span>
+    </div>
+  </div>
 </div>
 
-<!-- MENU 1: Pre-login bottom nav (mobile) -->
-<nav class="bottom-nav" id="bottomNavPreLogin" role="navigation">
-    <div class="bottom-nav-inner">
-        <button class="bottom-nav-btn active" data-page="login" data-src="page-login.html">
-            <span class="nav-emoji">🔐</span>
-            <span class="nav-label">Login</span>
-        </button>
-        <button class="bottom-nav-btn" data-page="schedule" data-src="page-schedule.html">
-            <span class="nav-emoji">📅</span>
-            <span class="nav-label">Schedule</span>
-        </button>
-        <button class="bottom-nav-btn" data-page="eligibility" data-src="page-eligibility.html">
-            <span class="nav-emoji">🛡️</span>
-            <span class="nav-label">Eligibility</span>
-        </button>
-        <button class="bottom-nav-btn" data-page="syllabus" data-src="page-syllabus.html">
-            <span class="nav-emoji">📋</span>
-            <span class="nav-label">Syllabus</span>
-        </button>
-    </div>
+<!-- Pre-login bottom nav (mobile) -->
+<nav class="bottom-nav" id="bottomNavPreLogin" role="tablist">
+  <div class="bottom-nav-inner">
+    <button class="active" data-page="login" data-src="page-login.html">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Sign in</span>
+    </button>
+    <button data-page="schedule" data-src="page-schedule.html">
+      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span>Schedule</span>
+    </button>
+    <button data-page="eligibility" data-src="page-eligibility.html">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Eligibility</span>
+    </button>
+    <button data-page="syllabus" data-src="page-syllabus.html">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span>Syllabus</span>
+    </button>
+  </div>
 </nav>
 
-<!-- MENU 2: Post-login bottom nav (mobile) -->
-<nav class="bottom-nav" id="bottomNavPostLogin" role="navigation" style="display:none">
-    <div class="bottom-nav-inner">
-        <button class="bottom-nav-btn active" data-mode="mcq">
-            <span class="nav-emoji">📝</span>
-            <span class="nav-label">MCQs</span>
-        </button>
-        <button class="bottom-nav-btn" data-mode="read">
-            <span class="nav-emoji">📖</span>
-            <span class="nav-label">Solved</span>
-        </button>
-        <button class="bottom-nav-btn" data-mode="facts">
-            <span class="nav-emoji">💡</span>
-            <span class="nav-label">Facts</span>
-        </button>
-        <button class="bottom-nav-btn" data-mode="papers">
-            <span class="nav-emoji">📄</span>
-            <span class="nav-label">Papers</span>
-        </button>
-    </div>
+<!-- Post-login bottom nav (mobile) -->
+<nav class="bottom-nav" id="bottomNavPostLogin" style="display:none" role="tablist">
+  <div class="bottom-nav-inner">
+    <button class="active" data-mode="mcq">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+      <span>Practice</span>
+    </button>
+    <button data-mode="read">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><path d="M4 17h15"/></svg>
+      <span>Solutions</span>
+    </button>
+    <button data-mode="facts">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>
+      <span>Facts</span>
+    </button>
+    <button data-mode="papers">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+      <span>Papers</span>
+    </button>
+  </div>
 </nav>
 
 <script>
-    (function () {
-        const stage = document.getElementById('pageStage');
-        const topBarPre = document.getElementById('topToggleBarPreLogin');
-        const bottomNavPre = document.getElementById('bottomNavPreLogin');
-        const bottomNavPost = document.getElementById('bottomNavPostLogin');
+(function () {
+  const stage          = document.getElementById('stage');
+  const loader         = document.getElementById('loader');
+  const topTabsPre     = document.getElementById('topTabsPreLogin');
+  const bottomNavPre   = document.getElementById('bottomNavPreLogin');
+  const bottomNavPost  = document.getElementById('bottomNavPostLogin');
 
-        const preLoginButtons = () => document.querySelectorAll('#topToggleBarPreLogin .toggle-btn, #bottomNavPreLogin .bottom-nav-btn');
-        const postLoginButtons = () => document.querySelectorAll('#bottomNavPostLogin .bottom-nav-btn');
+  const KEY_USER       = 'slUser';
+  const KEY_POST_LOGIN = 'slPostLogin';
+  const KEY_MODE       = 'slMode';
+  const KEY_FACTS_READ = 'slFactsRead';
 
-        const frames = new Map();
-        let activePage = null;
+  const THEME = {
+    primary: '#1e6fd9',
+    primaryDark: '#1857ab',
+    primarySoft: '#e8f1fc',
+    bg: '#f7f8fa',
+    surface: '#ffffff',
+    surfaceAlt: '#f1f3f7',
+    border: '#e3e6ec',
+    text: '#1a1d23',
+    textSecondary: '#5a6472',
+    textMuted: '#8b95a5',
+    success: '#0d8a5a',
+    successSoft: '#e3f5ed',
+    danger: '#c8352e',
+    dangerSoft: '#fdecea',
+    warning: '#b7791f',
+    warningSoft: '#fdf6e3'
+  };
 
-        const THEME = {
-            navy: '#0a1e3f', navyLight: '#1a3a6b', navySoft: '#e8eef7',
-            black: '#0f1419', yellow: '#f5b800', yellowDark: '#d99e00',
-            yellowSoft: '#fff7dd', sky: '#0ea5e9', skyDark: '#0284c7', skySoft: '#e0f2fe',
-            bg: '#f4f6fa', card: '#ffffff',
-            text: '#0f1419', textSoft: '#475569', textMuted: '#94a3b8',
-            border: '#e2e8f0',
-            success: '#059669', danger: '#dc2626', warning: '#d97706', info: '#0284c7'
-        };
+  const frames = new Map();
+  let activePage = null;
+  let eduFrame = null;
 
-        const KEY_USER = 'slUser';
-        const KEY_POST_LOGIN = 'slPostLogin';
-        let eduFrameRef = null;
+  /* ---------- Helpers ---------- */
+  function preLoginButtons() {
+    return document.querySelectorAll(
+      '#topTabsPreLogin button, #bottomNavPreLogin button'
+    );
+  }
+  function postLoginButtons() {
+    return document.querySelectorAll('#bottomNavPostLogin button');
+  }
+  function hideLoader() {
+    if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+  }
 
-        /* ---------- Pre-login page management ---------- */
-        function showPage(pageId, src) {
-            if (activePage === pageId) return;
-            activePage = pageId;
+  /* ---------- Pre-login page management ---------- */
+  function showPage(pageId, src) {
+    if (activePage === pageId) return;
+    activePage = pageId;
 
-            preLoginButtons().forEach(b => {
-                if (b.dataset.page) b.classList.toggle('active', b.dataset.page === pageId);
-            });
+    preLoginButtons().forEach((b) => {
+      if (b.dataset.page) b.classList.toggle('active', b.dataset.page === pageId);
+    });
 
-            if (!frames.has(pageId)) {
-                const wrap = document.createElement('div');
-                wrap.className = 'page-frame';
-                wrap.style.position = 'relative';
-                wrap.style.minHeight = 'calc(100vh - 100px)';
-                wrap.style.opacity = '0';
-                wrap.style.pointerEvents = 'none';
-                wrap.dataset.pageId = pageId;
+    if (!frames.has(pageId)) {
+      const iframe = document.createElement('iframe');
+      iframe.className = 'frame';
+      iframe.src = src;
+      iframe.title = 'Self Learners · ' + pageId;
+      iframe.setAttribute('loading', 'lazy');
+      iframe.style.cssText = 'width:100%;border:0;display:block;background:transparent;';
 
-                const loader = document.createElement('div');
-                loader.className = 'page-loading';
-                loader.innerHTML = '<div class="spinner"></div><span>Loading…</span>';
+      iframe.addEventListener('load', () => {
+        try {
+          iframe.contentWindow.postMessage({ type: 'SL_THEME', theme: THEME }, '*');
+        } catch (e) { /* ignore */ }
+      });
 
-                const iframe = document.createElement('iframe');
-                iframe.src = src;
-                iframe.title = 'Self Learners · ' + pageId;
-                iframe.setAttribute('loading', 'lazy');
-                iframe.style.cssText = 'width:100%;min-height:calc(100vh - 100px);border:none;display:block;background:transparent;';
+      stage.appendChild(iframe);
+      frames.set(pageId, iframe);
+    }
 
-                wrap.appendChild(loader);
-                wrap.appendChild(iframe);
-                stage.appendChild(wrap);
+    frames.forEach((iframe, id) => {
+      const isActive = id === pageId;
+      iframe.classList.toggle('active', isActive);
+    });
 
-                iframe.addEventListener('load', () => {
-                    try {
-                        iframe.contentWindow.postMessage({ type: 'SL_THEME', theme: THEME }, '*');
-                    } catch (e) { /* ignore */ }
-                    wrap.style.opacity = '1';
-                    wrap.style.pointerEvents = 'auto';
-                    loader.style.display = 'none';
-                });
+    hideLoader();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-                setTimeout(() => {
-                    if (loader.style.display !== 'none') {
-                        wrap.style.opacity = '1';
-                        wrap.style.pointerEvents = 'auto';
-                        loader.style.display = 'none';
-                    }
-                }, 3000);
+  /* ---------- Post-login ---------- */
+  function enterPostLogin(opts) {
+    opts = opts || {};
+    try { localStorage.setItem(KEY_POST_LOGIN, '1'); } catch (e) {}
 
-                frames.set(pageId, wrap);
-            }
+    if (topTabsPre)   topTabsPre.style.display   = 'none';
+    if (bottomNavPre) bottomNavPre.style.display = 'none';
+    if (bottomNavPost) bottomNavPost.style.display = '';
 
-            frames.forEach((wrap, id) => {
-                const isActive = id === pageId;
-                wrap.classList.toggle('active', isActive);
-                wrap.style.opacity = isActive ? '1' : '0';
-                wrap.style.pointerEvents = isActive ? 'auto' : 'none';
-                wrap.style.position = isActive ? 'relative' : 'absolute';
-                wrap.style.display = isActive ? 'block' : 'none';
-            });
+    // Hide all pre-login frames
+    frames.forEach((iframe) => {
+      iframe.classList.remove('active');
+    });
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!eduFrame) {
+      const iframe = document.createElement('iframe');
+      iframe.className = 'frame active';
+      iframe.src = 'page-edu.html';
+      iframe.title = 'Self Learners · Edu';
+      iframe.style.cssText = 'width:100%;border:0;display:block;background:transparent;';
+
+      iframe.addEventListener('load', () => {
+        try {
+          iframe.contentWindow.postMessage({ type: 'SL_THEME', theme: THEME }, '*');
+          if (opts.user) {
+            iframe.contentWindow.postMessage(
+              { type: 'SL_USER', user: opts.user, isGuest: !!opts.isGuest }, '*'
+            );
+          }
+          if (opts.mode) {
+            iframe.contentWindow.postMessage({ type: 'SL_SET_MODE', mode: opts.mode }, '*');
+          }
+        } catch (e) {}
+      });
+
+      stage.appendChild(iframe);
+      eduFrame = iframe;
+      frames.set('edu', iframe);
+    } else {
+      eduFrame.classList.add('active');
+      try {
+        if (opts.user) {
+          eduFrame.contentWindow.postMessage(
+            { type: 'SL_USER', user: opts.user, isGuest: !!opts.isGuest }, '*'
+          );
         }
-
-        /* ---------- Login-state swapping ---------- */
-        function enterPostLogin(opts) {
-            opts = opts || {};
-            try { localStorage.setItem(KEY_POST_LOGIN, '1'); } catch (e) { /* ignore */ }
-
-            topBarPre.style.display = 'none';
-            bottomNavPre.style.display = 'none';
-            bottomNavPost.style.display = '';
-
-            // Hide all pre-login frames
-            frames.forEach((wrap) => {
-                wrap.style.display = 'none';
-                wrap.style.opacity = '0';
-                wrap.style.pointerEvents = 'none';
-            });
-
-            if (!eduFrameRef) {
-                const wrap = document.createElement('div');
-                wrap.className = 'page-frame active';
-                wrap.style.position = 'relative';
-                wrap.style.minHeight = 'calc(100vh - 100px)';
-                wrap.style.opacity = '1';
-                wrap.style.pointerEvents = 'auto';
-                wrap.dataset.pageId = 'edu';
-
-                const loader = document.createElement('div');
-                loader.className = 'page-loading';
-                loader.innerHTML = '<div class="spinner"></div><span>Loading…</span>';
-
-                const iframe = document.createElement('iframe');
-                iframe.src = 'page-edu.html';
-                iframe.title = 'Self Learners · Edu';
-                iframe.style.cssText = 'width:100%;min-height:calc(100vh - 100px);border:none;display:block;background:transparent;';
-
-                wrap.appendChild(loader);
-                wrap.appendChild(iframe);
-                stage.appendChild(wrap);
-
-                iframe.addEventListener('load', () => {
-                    try {
-                        iframe.contentWindow.postMessage({ type: 'SL_THEME', theme: THEME }, '*');
-                        if (opts.user) iframe.contentWindow.postMessage({ type: 'SL_USER', user: opts.user, isGuest: opts.isGuest }, '*');
-                        if (opts.mode) iframe.contentWindow.postMessage({ type: 'SL_SET_MODE', mode: opts.mode }, '*');
-                    } catch (e) { /* ignore */ }
-                    wrap.style.opacity = '1';
-                    wrap.style.pointerEvents = 'auto';
-                    loader.style.display = 'none';
-                });
-
-                setTimeout(() => {
-                    if (loader.style.display !== 'none') {
-                        wrap.style.opacity = '1';
-                        wrap.style.pointerEvents = 'auto';
-                        loader.style.display = 'none';
-                    }
-                }, 3000);
-
-                eduFrameRef = { wrap, iframe };
-                frames.set('edu', wrap);
-            } else {
-                eduFrameRef.wrap.style.display = 'block';
-                eduFrameRef.wrap.style.opacity = '1';
-                eduFrameRef.wrap.style.pointerEvents = 'auto';
-                eduFrameRef.wrap.classList.add('active');
-                try {
-                    if (opts.user) eduFrameRef.iframe.contentWindow.postMessage({ type: 'SL_USER', user: opts.user, isGuest: opts.isGuest }, '*');
-                    if (opts.mode) eduFrameRef.iframe.contentWindow.postMessage({ type: 'SL_SET_MODE', mode: opts.mode }, '*');
-                } catch (e) { /* ignore */ }
-            }
-
-            setActivePostLoginButton('mcq');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (opts.mode) {
+          eduFrame.contentWindow.postMessage({ type: 'SL_SET_MODE', mode: opts.mode }, '*');
         }
+      } catch (e) {}
+    }
 
-        function exitToLogin() {
-            try { localStorage.removeItem(KEY_POST_LOGIN); } catch (e) { /* ignore */ }
+    hideLoader();
+    setActivePostButton('mcq');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-            bottomNavPost.style.display = 'none';
-            topBarPre.style.display = '';
-            bottomNavPre.style.display = '';
+  function exitToLogin() {
+    try {
+      localStorage.removeItem(KEY_POST_LOGIN);
+      localStorage.removeItem(KEY_MODE);
+      localStorage.removeItem(KEY_FACTS_READ);
+    } catch (e) {}
 
-            // Hide edu frame
-            if (eduFrameRef) {
-                eduFrameRef.wrap.style.display = 'none';
-                eduFrameRef.wrap.style.opacity = '0';
-                eduFrameRef.wrap.style.pointerEvents = 'none';
-                eduFrameRef.wrap.classList.remove('active');
-                // Ask Edu to close any open overlays
-                try {
-                    eduFrameRef.iframe.contentWindow.postMessage({ type: 'SL_FORCE_CLOSE_OVERLAYS' }, '*');
-                } catch (e) { /* ignore */ }
-            }
+    if (bottomNavPost) bottomNavPost.style.display = 'none';
+    if (topTabsPre)    topTabsPre.style.display = '';
+    if (bottomNavPre)  bottomNavPre.style.display = '';
 
-            // Remove cached login frame so it reloads fresh
-            if (frames.has('login')) {
-                const w = frames.get('login');
-                w.remove();
-                frames.delete('login');
-            }
-            activePage = null;
+    if (eduFrame) {
+      eduFrame.classList.remove('active');
+      try {
+        eduFrame.contentWindow.postMessage({ type: 'SL_FORCE_CLOSE_OVERLAYS' }, '*');
+      } catch (e) {}
+    }
 
-            showPage('login', 'page-login.html');
-        }
+    // Remove cached login frame so it reloads fresh
+    if (frames.has('login')) {
+      const f = frames.get('login');
+      if (f.parentNode) f.parentNode.removeChild(f);
+      frames.delete('login');
+    }
 
-        function setActivePostLoginButton(mode) {
-            postLoginButtons().forEach(b => {
-                if (b.dataset.mode) b.classList.toggle('active', b.dataset.mode === mode);
-            });
-        }
+    activePage = null;
+    showPage('login', 'page-login.html');
+  }
 
-        /* ---------- Button wiring ---------- */
-        preLoginButtons().forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (btn.dataset.page && btn.dataset.src) {
-                    showPage(btn.dataset.page, btn.dataset.src);
-                }
-            });
-        });
+  function setActivePostButton(mode) {
+    postLoginButtons().forEach((b) => {
+      if (b.dataset.mode) b.classList.toggle('active', b.dataset.mode === mode);
+    });
+  }
 
-        postLoginButtons().forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (!btn.dataset.mode) return;
-                setActivePostLoginButton(btn.dataset.mode);
-                if (eduFrameRef) {
-                    try {
-                        eduFrameRef.iframe.contentWindow.postMessage({ type: 'SL_SET_MODE', mode: btn.dataset.mode }, '*');
-                    } catch (e) { /* ignore */ }
-                }
-            });
-        });
+  /* ---------- Wire pre-login buttons ---------- */
+  preLoginButtons().forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.page && btn.dataset.src) {
+        showPage(btn.dataset.page, btn.dataset.src);
+      }
+    });
+  });
 
-        /* ---------- postMessage from inner pages ---------- */
-        window.addEventListener('message', (e) => {
-            const d = e.data;
-            if (!d || typeof d !== 'object') return;
+  /* ---------- Wire post-login buttons ---------- */
+  postLoginButtons().forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!btn.dataset.mode) return;
+      setActivePostButton(btn.dataset.mode);
+      if (eduFrame) {
+        try {
+          eduFrame.contentWindow.postMessage(
+            { type: 'SL_SET_MODE', mode: btn.dataset.mode }, '*'
+          );
+        } catch (e) {}
+      }
+    });
+  });
 
-            if (d.type === 'SL_LOGIN') {
-                try {
-                    if (d.user) localStorage.setItem(KEY_USER, JSON.stringify(d.user));
-                } catch (err) { /* ignore */ }
-                enterPostLogin({ user: d.user, isGuest: d.isGuest, mode: 'mcq' });
-            } else if (d.type === 'SL_LOGOUT') {
-                try { localStorage.removeItem(KEY_USER); } catch (err) { /* ignore */ }
-                exitToLogin();
-            } else if (d.type === 'SL_SET_MODE_FROM_EDU') {
-                setActivePostLoginButton(d.mode);
-            }
-        });
+  /* ---------- postMessage from inner pages ---------- */
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d || typeof d !== 'object') return;
 
-        /* ---------- Initial load ---------- */
-        function boot() {
-            let loggedIn = false;
-            let savedUser = null;
-            try {
-                savedUser = JSON.parse(localStorage.getItem(KEY_USER) || 'null');
-                loggedIn = !!localStorage.getItem(KEY_POST_LOGIN) && !!savedUser;
-            } catch (e) { /* ignore */ }
+    if (d.type === 'SL_LOGIN') {
+      try {
+        if (d.user) localStorage.setItem(KEY_USER, JSON.stringify(d.user));
+      } catch (err) {}
+      enterPostLogin({ user: d.user, isGuest: d.isGuest, mode: 'mcq' });
+    } else if (d.type === 'SL_LOGOUT') {
+      try { localStorage.removeItem(KEY_USER); } catch (err) {}
+      exitToLogin();
+    } else if (d.type === 'SL_SET_MODE_FROM_EDU') {
+      setActivePostButton(d.mode);
+    }
+  });
 
-            if (loggedIn) {
-                enterPostLogin({ user: savedUser, isGuest: savedUser.user === 'Guest', mode: 'mcq' });
-            } else {
-                showPage('login', 'page-login.html');
-            }
-        }
+  /* ---------- Boot ---------- */
+  function boot() {
+    let loggedIn = false;
+    let savedUser = null;
+    try {
+      savedUser = JSON.parse(localStorage.getItem(KEY_USER) || 'null');
+      loggedIn = !!localStorage.getItem(KEY_POST_LOGIN) && !!savedUser;
+    } catch (e) {}
 
-        window.__enterPostLogin = enterPostLogin;
-        window.__exitToLogin = exitToLogin;
+    if (loggedIn) {
+      enterPostLogin({
+        user: savedUser,
+        isGuest: savedUser.user === 'Guest',
+        mode: 'mcq'
+      });
+    } else {
+      showPage('login', 'page-login.html');
+    }
+  }
 
-        boot();
-    })();
+  /* Expose for debugging */
+  window.__enterPostLogin = enterPostLogin;
+  window.__exitToLogin    = exitToLogin;
+
+  boot();
+})();
 </script>
 
 <script>
 /* Service worker registration */
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-            .then((reg) => console.log('[PWA] SW registered', reg.scope))
-            .catch((e) => console.warn('[PWA] SW failed', e));
-    });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
 }
 </script>
 </body>
