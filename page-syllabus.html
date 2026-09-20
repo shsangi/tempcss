@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e6fd9">
+<title>Syllabus · Self Learners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --primary:#1e6fd9; --primary-dark:#1857ab; --primary-soft:#e8f1fc;
+    --bg:#f7f8fa; --surface:#ffffff; --surface-alt:#f1f3f7;
+    --border:#e3e6ec; --border-strong:#cfd4dd;
+    --text:#1a1d23; --text-secondary:#5a6472; --text-muted:#8b95a5;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+    --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+    --shadow-md:0 2px 8px rgba(16,24,40,.08);
+  }
+  html, body { -webkit-text-size-adjust:100%; }
+  body {
+    font:400 14px/1.5 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+
+  .page { width: 100%; max-width: 720px; }
+
+  /* ---------- Header ---------- */
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .head h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .count {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Filters ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .search {
+    flex: 1 1 200px;
+    position: relative;
+  }
+  .search svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-muted);
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .search input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px 10px 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    color: var(--text);
+  }
+  .search input:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+  .filters select {
+    flex: 0 1 auto;
+    min-height: 44px;
+    padding: 10px 36px 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6472' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    cursor: pointer;
+    min-width: 150px;
+  }
+  .filters select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+
+  /* ---------- Paper block (subject) ---------- */
+  .paper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .paper-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .paper-head h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    cursor: pointer;
+  }
+  .paper-head h2:hover { color: var(--primary); }
+  .paper-head .topics {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .last {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Module ---------- */
+  .module {
+    margin-bottom: 16px;
+  }
+  .module:last-child { margin-bottom: 0; }
+  .module h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 0 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ---------- Topic ---------- */
+  .topic {
+    padding: 10px 0 10px 16px;
+    position: relative;
+    margin-bottom: 4px;
+    border-radius: var(--r-sm);
+  }
+  .topic::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 18px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+  .topic-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .topic-title:hover { color: var(--primary); }
+  .topic-num {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-right: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Subtopic list ---------- */
+  .subs {
+    list-style: none;
+    margin: 8px 0 4px;
+    padding: 0;
+    counter-reset: sub;
+  }
+  .subs li {
+    counter-increment: sub;
+    position: relative;
+    padding: 4px 0 4px 24px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .subs li::before {
+    content: counter(sub);
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .sub-link {
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .sub-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Sub-sub list (lettered) */
+  .sub-subs {
+    list-style: none;
+    margin: 2px 0 2px 20px;
+    padding: 0;
+  }
+  .sub-subs li {
+    position: relative;
+    padding: 3px 0 3px 18px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .sub-subs li::before {
+    content: attr(data-letter) ")";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Book reference ---------- */
+  .book {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .book-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+  }
+  .book-link {
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .book-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* ---------- States ---------- */
+  .state {
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+  .state.error { color: #c8352e; }
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    vertical-align: -3px;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 400px) {
+    body { padding: 12px; }
+    .paper { padding: 14px; }
+    .head h1 { font-size: 16px; }
+    .topic-title { font-size: 13.5px; }
+    .subs li { font-size: 12.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="head">
+    <h1>CSS syllabus</h1>
+    <span class="count" id="countDisplay">0 topics</span>
+  </div>
+
+  <div class="filters">
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" id="searchInput" placeholder="Search topic or book…" autocomplete="off" autocapitalize="off">
+    </div>
+    <select id="subjectSelect">
+      <option value="">All subjects</option>
+    </select>
+  </div>
+
+  <div id="container">
+    <div class="state"><span class="spinner"></span>Loading syllabus…</div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSficiiXO39uzMxJ7TUSd_2GNxZaX8R_ZlIjr_CUIpG2DTbMfw3eXJH3b1wJdbeX6ZUCykDg82uAiac/pub?output=csv';
+
+  const container    = document.getElementById('container');
+  const searchInput  = document.getElementById('searchInput');
+  const subjectSelect = document.getElementById('subjectSelect');
+  const countDisplay = document.getElementById('countDisplay');
+
+  let allRecords = [];
+  let filtered   = [];
+
+  /* ---------- CSV ---------- */
+  function parseLine(line) {
+    const out = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') inQuotes = false;
+        else cur += ch;
+      } else {
+        if (ch === ',') { out.push(cur.trim()); cur = ''; }
+        else if (ch === '"') inQuotes = true;
+        else cur += ch;
+      }
+    }
+    out.push(cur.trim());
+    return out;
+  }
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter((l) => l.trim() !== '');
+    if (lines.length < 2) return [];
+
+    const h = parseLine(lines[0]);
+    const idx = {
+      srno:       h.indexOf('srno'),
+      subject:    h.indexOf('subjectPaper') !== -1 ? h.indexOf('subjectPaper') : h.indexOf('subject'),
+      module:     h.indexOf('Module'),
+      topicNum:   h.indexOf('Topic Number'),
+      topicName:  h.indexOf('Topic Name / Detail'),
+      book:       h.indexOf('Recommended Book / Source to Study'),
+      dateRead:   h.indexOf('date_read'),
+      subtopics:  h.indexOf('Possible Subtopics (FPSC Syllabus Past Papers & Recent Topics)')
+    };
+    const subIdx = idx.subtopics !== -1 ? idx.subtopics : idx.topicName;
+
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const c = parseLine(lines[i]);
+      if (c.length < 8) continue;
+
+      const srno = c[idx.srno] || '';
+      if (isNaN(parseFloat(srno)) || srno.trim() === '') continue;
+
+      rows.push({
+        srno,
+        subject:   c[idx.subject]  || '',
+        module:    c[idx.module]   || '',
+        topicNum:  c[idx.topicNum] || '',
+        topicName: c[idx.topicName] || '',
+        book:      c[idx.book]     || '',
+        dateRead:  c[idx.dateRead] || '',
+        subtopics: c[subIdx]       || ''
+      });
+    }
+    return rows;
+  }
+
+  /* ---------- Utilities ---------- */
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function googleSearch(query) {
+    const clean = (query || '').trim();
+    if (!clean) return;
+    window.open('https://www.google.com/search?q=css+' + encodeURIComponent(clean), '_blank', 'noopener');
+  }
+
+  // Split a subtopics blob into an array of items
+  function smartSplit(text) {
+    if (!text || text.trim() === '') return [];
+
+    if (text.includes('\n')) {
+      const parts = text.split('\n').map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 1) return parts;
+    }
+
+    const letterRe = /[a-z]\)\s*[^,;.]*?(?:[.,;]\s*(?=[a-z]\))|$)/gi;
+    const letters = text.match(letterRe);
+    if (letters && letters.length > 1) {
+      const rest = text.replace(letterRe, '').trim();
+      if (rest && /\d+\./.test(rest)) {
+        const numRe = /\d+\.\s*[^.]*?(?:\.\s*(?=\d+\.)|$)/g;
+        const nums = rest.match(numRe);
+        const out = letters.map((s) => s.trim());
+        if (nums) for (const n of nums) if (n.trim()) out.push(n.trim());
+        return out;
+      }
+      return letters.map((s) => s.trim());
+    }
+
+    const nums = text.match(/\d+\.\s*[^.]*?(?:\.\s*(?=\d+\.)|$)/g);
+    if (nums && nums.length > 1) return nums.map((s) => s.trim());
+
+    if (text.includes(';')) {
+      const parts = text.split(';').map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 1) return parts;
+    }
+
+    if (text.includes(',')) {
+      const parts = text.split(',').map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 1) return parts;
+    }
+
+    if (text.includes('. ')) {
+      const parts = text.split('. ').map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 1) return parts;
+    }
+
+    return [text.trim()];
+  }
+
+  function isNumbered(t) { return /^\d+\./.test(t.trim()); }
+
+  function hasSubLetters(t) {
+    if (!t) return false;
+    const matches = t.match(/[a-z]\)\s*[^,;.]*?(?:[.,;]\s*(?=[a-z]\))|$)/gi);
+    return !!matches && matches.length > 1;
+  }
+
+  function extractSubLetters(t) {
+    if (!t) return [];
+    const m = t.match(/[a-z]\)\s*[^,;.]*?(?:[.,;]\s*(?=[a-z]\))|$)/gi);
+    return m ? m.map((s) => s.trim()) : [];
+  }
+
+  function formatDateInPKT(dateStr) {
+    if (!dateStr || dateStr.trim() === '') return '';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const utc = d.getTime() + d.getTimezoneOffset() * 60000;
+      const pkt = new Date(utc + 5 * 3600000);
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      let h = pkt.getUTCHours();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      const min = String(pkt.getUTCMinutes()).padStart(2, '0');
+      return days[pkt.getUTCDay()] + ', ' + pkt.getUTCDate() + ' ' +
+             months[pkt.getUTCMonth()] + ' ' + pkt.getUTCFullYear() + ', ' +
+             h + ':' + min + ' ' + ampm;
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  /* ---------- Render ---------- */
+  function render(records) {
+    if (!records || records.length === 0) {
+      container.innerHTML = '<div class="state">No topics match your search.</div>';
+      countDisplay.textContent = '0 topics';
+      return;
+    }
+
+    const groups = {};
+    for (const r of records) {
+      const key = r.subject || 'Uncategorized';
+      (groups[key] = groups[key] || []).push(r);
+    }
+
+    let html = '';
+
+    for (const subject of Object.keys(groups)) {
+      const items = groups[subject].sort((a, b) => parseFloat(a.srno) - parseFloat(b.srno));
+
+      // Latest dateRead
+      let latest = '';
+      for (const item of items) {
+        if (item.dateRead && item.dateRead.trim() !== '') {
+          const d = new Date(item.dateRead);
+          if (!isNaN(d.getTime())) {
+            if (!latest || d > new Date(latest)) latest = item.dateRead;
+          }
+        }
+      }
+
+      html += '<div class="paper">';
+      html += '<div class="paper-head">';
+      html +=   '<h2 data-search="' + escapeHtml(subject) + '">' + escapeHtml(subject) + '</h2>';
+      html +=   '<span class="topics">' + items.length + ' topic' + (items.length !== 1 ? 's' : '') + '</span>';
+      html += '</div>';
+
+      if (latest) {
+        html += '<div class="last">Last studied: ' + escapeHtml(formatDateInPKT(latest)) + '</div>';
+      } else {
+        html += '<div class="last">Not studied yet</div>';
+      }
+
+      // Group by module
+      const moduleMap = {};
+      for (const item of items) {
+        const mod = item.module || 'General';
+        (moduleMap[mod] = moduleMap[mod] || []).push(item);
+      }
+
+      for (const mod of Object.keys(moduleMap)) {
+        html += '<div class="module">';
+        html +=   '<h3>' + escapeHtml(mod) + '</h3>';
+
+        for (const t of moduleMap[mod]) {
+          const numPrefix = t.topicNum ? '<span class="topic-num">' + escapeHtml(t.topicNum) + '</span>' : '';
+
+          html += '<div class="topic">';
+          html +=   '<div class="topic-title" data-search="' + escapeHtml(t.topicName || '') + '">' +
+                      numPrefix + escapeHtml(t.topicName || '—') +
+                    '</div>';
+
+          const subItems = smartSplit(t.subtopics || t.topicName || '');
+          if (subItems.length > 0) {
+            html += '<ul class="subs">';
+            for (const sub of subItems) {
+              if (hasSubLetters(sub)) {
+                const subLetters = extractSubLetters(sub);
+                const mainPart = sub.replace(/[a-z]\)\s*[^,;.]*?(?:[.,;]\s*(?=[a-z]\))|$)/gi, '').trim();
+                const cleanMain = mainPart.replace(/[:–-]\s*$/, '').trim();
+
+                if (cleanMain) {
+                  html += '<li><span class="sub-link" data-search="' + escapeHtml(cleanMain) + '">' +
+                            escapeHtml(cleanMain) +
+                          '</span></li>';
+                }
+                if (subLetters.length > 0) {
+                  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+                  html += '<ul class="sub-subs">';
+                  for (let i = 0; i < subLetters.length; i++) {
+                    const letter = alphabet[i] || '?';
+                    const cleanSub = subLetters[i].replace(/^[a-z]\)\s*/, '').trim();
+                    html += '<li data-letter="' + letter + '">' +
+                              '<span class="sub-link" data-search="' + escapeHtml(cleanSub) + '">' +
+                                escapeHtml(cleanSub) +
+                              '</span>' +
+                            '</li>';
+                  }
+                  html += '</ul>';
+                }
+              } else if (isNumbered(sub)) {
+                const clean = sub.replace(/^\d+\.\s*/, '').trim();
+                html += '<li><span class="sub-link" data-search="' + escapeHtml(clean) + '">' +
+                          escapeHtml(clean) +
+                        '</span></li>';
+              } else {
+                const clean = sub.replace(/^\d+\.\s*/, '').replace(/[;,:]\s*$/, '').trim();
+                if (clean) {
+                  html += '<li><span class="sub-link" data-search="' + escapeHtml(clean) + '">' +
+                            escapeHtml(clean) +
+                          '</span></li>';
+                }
+              }
+            }
+            html += '</ul>';
+          }
+
+          if (t.book && t.book !== '—') {
+            html += '<div class="book">' +
+                      '<span class="book-label">Book</span>' +
+                      '<span class="book-link" data-search="' + escapeHtml(t.book) + '">' +
+                        escapeHtml(t.book) +
+                      '</span>' +
+                    '</div>';
+          }
+
+          html += '</div>';
+        }
+
+        html += '</div>';
+      }
+
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+    countDisplay.textContent = records.length + ' topic' + (records.length !== 1 ? 's' : '');
+
+    // Wire up click-to-search on every [data-search]
+    container.querySelectorAll('[data-search]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        googleSearch(el.getAttribute('data-search'));
+      });
+    });
+  }
+
+  /* ---------- Filters ---------- */
+  function applyFilters() {
+    const q = searchInput.value.trim().toLowerCase();
+    const subject = subjectSelect.value;
+
+    filtered = allRecords.filter((r) => {
+      if (subject && r.subject !== subject) return false;
+      if (!q) return true;
+      const hay = (r.srno + ' ' + r.subject + ' ' + r.module + ' ' + r.topicNum + ' ' +
+                   r.topicName + ' ' + r.book + ' ' + r.subtopics).toLowerCase();
+      return hay.indexOf(q) !== -1;
+    });
+
+    render(filtered);
+  }
+
+  function populateSubjects(records) {
+    const subs = new Set();
+    records.forEach((r) => { if (r.subject) subs.add(r.subject); });
+    const current = subjectSelect.value;
+
+    subjectSelect.innerHTML = '<option value="">All subjects</option>';
+    [...subs].sort().forEach((s) => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      subjectSelect.appendChild(opt);
+    });
+
+    if ([...subs].includes(current)) subjectSelect.value = current;
+  }
+
+  /* ---------- Load ---------- */
+  async function loadSyllabus() {
+    try {
+      const url = CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const parsed = parseCSV(text);
+
+      if (parsed.length === 0) {
+        container.innerHTML = '<div class="state error">No data found in syllabus sheet.</div>';
+        countDisplay.textContent = '0 topics';
+        return;
+      }
+
+      allRecords = parsed;
+      populateSubjects(allRecords);
+      applyFilters();
+    } catch (e) {
+      container.innerHTML = '<div class="state error">Failed to load syllabus. Check your connection and refresh.</div>';
+      countDisplay.textContent = '0 topics';
+    }
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  subjectSelect.addEventListener('change', applyFilters);
+
+  loadSyllabus();
+})();
+</script>
+</body>
+</html>
