@@ -1,0 +1,3306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e6fd9">
+<title>Practice · Self Learners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --primary:#1e6fd9; --primary-dark:#1857ab; --primary-soft:#e8f1fc;
+    --bg:#f7f8fa; --surface:#ffffff; --surface-alt:#f1f3f7;
+    --border:#e3e6ec; --border-strong:#cfd4dd;
+    --text:#1a1d23; --text-secondary:#5a6472; --text-muted:#8b95a5;
+    --success:#0d8a5a; --success-soft:#e3f5ed;
+    --danger:#c8352e;  --danger-soft:#fdecea;
+    --warning:#b7791f; --warning-soft:#fdf6e3;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+    --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+    --shadow-md:0 2px 8px rgba(16,24,40,.08);
+  }
+  html, body { -webkit-text-size-adjust:100%; }
+  body {
+    font:400 14px/1.5 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: transparent;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    padding: 12px;
+    padding-bottom: 24px;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  .app {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 14px;
+  }
+
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
+  .top-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .top-row-1 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .title-block {
+    flex: 1;
+    min-width: 0;
+  }
+  .title-block h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .title-block .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .title-block .subtitle:empty { display: none; }
+
+  .top-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+    transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .icon-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon-btn.spin svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .top-row-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Mode dropdown */
+  .mode-drop {
+    position: relative;
+    display: inline-block;
+  }
+  .mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color .15s;
+  }
+  .mode-btn:hover { border-color: var(--primary); }
+  .mode-btn .caret {
+    font-size: 9px;
+    color: var(--text-muted);
+    transition: transform .2s;
+  }
+  .mode-drop.open .mode-btn .caret { transform: rotate(180deg); }
+  .mode-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 150px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
+    padding: 4px;
+    display: none;
+    flex-direction: column;
+    z-index: 200;
+  }
+  .mode-drop.open .mode-menu { display: flex; }
+  .mode-menu button {
+    display: flex;
+    align-items: center;
+    padding: 9px 10px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    color: var(--text);
+    text-align: left;
+    transition: background .12s;
+  }
+  .mode-menu button:hover { background: var(--surface-alt); }
+  .mode-menu button.active {
+    color: var(--primary);
+    font-weight: 600;
+    background: var(--primary-soft);
+  }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .stats b { color: var(--text); font-weight: 600; }
+  .stats .sep { color: var(--text-muted); }
+  .stats .timer {
+    padding: 4px 8px;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stats .timer.warning {
+    background: var(--warning-soft);
+    color: var(--warning);
+  }
+  .stats .timer.danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+  .stats.hide-timer .timer { display: none; }
+
+  /* ============================================================
+     PROGRESS
+     ============================================================ */
+  .progress {
+    height: 4px;
+    background: var(--border);
+    border-radius: var(--r-full);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: var(--r-full);
+    transition: width .35s ease;
+    width: 0;
+  }
+
+  /* ============================================================
+     QUESTION CARD
+     ============================================================ */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 18px;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 16px;
+    word-break: break-word;
+    cursor: pointer;
+  }
+  .q-text:hover { color: var(--primary-dark); }
+  .q-num {
+    display: inline-block;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-right: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    text-align: left;
+    transition: border-color .12s, background .12s;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+  .opt:disabled { cursor: default; }
+  .opt .letter {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+  .opt .opt-label {
+    flex: 1;
+    word-break: break-word;
+  }
+  .opt .ind {
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .opt.correct {
+    background: var(--success-soft);
+    border-color: var(--success);
+  }
+  .opt.correct .letter { background: var(--success); color: #fff; }
+  .opt.correct .ind { color: var(--success); }
+  .opt.wrong {
+    background: var(--danger-soft);
+    border-color: var(--danger);
+  }
+  .opt.wrong .letter { background: var(--danger); color: #fff; }
+  .opt.wrong .ind { color: var(--danger); }
+  .opt.selected {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: var(--r-md);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .feedback.ok {
+    background: var(--success-soft);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+  .feedback.no {
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+
+  .q-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .q-meta .m-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     ACTION BAR (Back / Next)
+     ============================================================ */
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    flex: 1;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+  .btn-ghost {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    flex: 1;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .btn-success {
+    background: var(--success);
+    color: #fff;
+    width: 100%;
+  }
+  .btn-success:hover:not(:disabled) { filter: brightness(1.05); }
+
+  .end-wrap {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ============================================================
+     OVERVIEW (collapsible)
+     ============================================================ */
+  .overview {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .overview summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: 4px 0;
+  }
+  .overview summary::-webkit-details-marker { display: none; }
+  .overview summary::after {
+    content: "▾";
+    font-size: 9px;
+    color: var(--text-muted);
+    transition: transform .2s;
+    margin-left: auto;
+  }
+  .overview[open] summary::after { transform: rotate(180deg); }
+  .ov-stats {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .ov-stats .ok { color: var(--success); font-weight: 600; }
+  .ov-stats .no { color: var(--danger); font-weight: 600; }
+
+  .grid-dots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .dot {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: border-color .12s;
+  }
+  .dot:hover:not(.locked) { border-color: var(--primary); }
+  .dot.correct {
+    background: var(--success-soft);
+    border-color: var(--success);
+    color: var(--success);
+    font-weight: 600;
+  }
+  .dot.wrong {
+    background: var(--danger-soft);
+    border-color: var(--danger);
+    color: var(--danger);
+    font-weight: 600;
+  }
+  .dot.pending {
+    background: var(--surface-alt);
+    border-color: var(--border);
+  }
+  .dot.active {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+  }
+  .dot.locked {
+    opacity: .45;
+    cursor: not-allowed;
+    position: relative;
+  }
+  .dot.locked::after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+  }
+
+  /* ============================================================
+     RESULT SCREEN
+     ============================================================ */
+  .result { display: none; }
+  .result.show { display: block; }
+
+  .result-head {
+    text-align: center;
+    padding: 20px 12px;
+  }
+  .result-score {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-msg {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .result-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .result-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .result-item.ok    { border-left: 3px solid var(--success); }
+  .result-item.no    { border-left: 3px solid var(--danger); }
+  .result-item.skip  { border-left: 3px solid var(--text-muted); }
+  .result-item.invalid { border-left: 3px solid var(--warning); }
+  .result-item .ri-q {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    cursor: pointer;
+    word-break: break-word;
+  }
+  .result-item .ri-q:hover { color: var(--primary-dark); }
+  .result-item .ri-a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    word-break: break-word;
+  }
+  .result-item .ri-a .ok  { color: var(--success); font-weight: 600; }
+  .result-item .ri-a .no  { color: var(--danger);  font-weight: 600; }
+
+  .guest-cta {
+    margin-top: 16px;
+    padding: 18px;
+    background: var(--primary-soft);
+    border-radius: var(--r-md);
+    text-align: center;
+  }
+  .guest-cta h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .guest-cta p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  /* ============================================================
+     READ / SOLUTIONS
+     ============================================================ */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .search-bar input {
+    flex: 1;
+    min-height: 40px;
+    padding: 8px 12px 8px 34px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 11px center;
+  }
+  .search-bar input:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+  .search-bar .clear {
+    min-height: 40px;
+    padding: 0 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: none;
+  }
+  .search-bar.has-text .clear { display: block; }
+  .search-bar .count {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 74vh;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .read-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 14px;
+  }
+  .read-item .ri-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .read-item .ri-num {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .read-item .ri-q {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    word-break: break-word;
+    cursor: pointer;
+  }
+  .read-item .ri-q:hover { color: var(--primary-dark); }
+
+  .read-item .ri-opts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .read-item .ri-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    background: var(--surface-alt);
+  }
+  .read-item .ri-opt .ro-l {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+  .read-item .ri-opt.ok {
+    background: var(--success-soft);
+    color: var(--success);
+    font-weight: 500;
+  }
+  .read-item .ri-opt.ok .ro-l {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+  .read-item .ri-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .read-item .ri-meta .rm {
+    display: inline-flex;
+    padding: 2px 7px;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    border-radius: var(--r-sm);
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     FACTS
+     ============================================================ */
+  .fact {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 14px;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .fact:hover { border-color: var(--primary); }
+  .fact.read {
+    border-left: 3px solid var(--success);
+  }
+  .fact-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .fact-head .f-num {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .fact-head .f-q {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .fact-status {
+    display: inline-flex;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-top: 6px;
+  }
+  .fact-status.verified   { background: var(--success-soft); color: var(--success); }
+  .fact-status.unverified { background: var(--surface-alt);  color: var(--text-muted); }
+  .fact-status.unknown    { background: var(--warning-soft); color: var(--warning); }
+
+  .fact-body {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .fact-body strong { color: var(--text); font-weight: 600; }
+  .fact-body .ans-empty {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .fact .fact-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .fact .fact-meta .fm {
+    display: inline-flex;
+    padding: 2px 7px;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    border-radius: var(--r-sm);
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     PAPERS (iframe view)
+     ============================================================ */
+  .papers-wrap {
+    min-height: 74vh;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--surface-alt);
+  }
+  .papers-wrap iframe {
+    width: 100%;
+    min-height: 74vh;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+
+  /* ============================================================
+     EMPTY / LOADING
+     ============================================================ */
+  .empty {
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+  .empty.error { color: var(--danger); }
+
+  /* ============================================================
+     DRAWER / MODAL (filters)
+     ============================================================ */
+  .sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(16,24,40,.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 1000;
+  }
+  .sheet-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sheet {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(92vw, 380px);
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: -8px 0 24px rgba(16,24,40,.12);
+    transform: translateX(105%);
+    transition: transform .28s cubic-bezier(.16,1,.3,1);
+    display: flex;
+    flex-direction: column;
+    z-index: 1001;
+  }
+  .sheet.open { transform: translateX(0); }
+
+  .sheet-head {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .sheet-head h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .sheet-close {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+  }
+  .sheet-close:hover { border-color: var(--primary); color: var(--primary); }
+  .sheet-close svg {
+    width: 14px; height: 14px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .sheet-section {
+    margin-bottom: 20px;
+  }
+  .sheet-section h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 8px;
+  }
+
+  .check-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .check:hover { background: var(--surface-alt); }
+  .check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .check.checked { font-weight: 600; color: var(--primary-dark); }
+  .check-group-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin: 12px 0 4px;
+  }
+  .check-group-label:first-child { margin-top: 0; }
+
+  .sheet-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--surface-alt);
+    border-radius: var(--r-md);
+    margin-bottom: 16px;
+  }
+  .sheet-user .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .sheet-user .name {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sheet-user .logout {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .sheet-user .logout:hover { border-color: var(--danger); }
+
+  .sheet-foot {
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+  .sheet-foot .btn {
+    flex: 1;
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  /* Job sites modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(16,24,40,.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 2000;
+  }
+  .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.96);
+    width: min(92vw, 540px);
+    max-height: 88vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: 0 20px 60px rgba(16,24,40,.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    display: flex;
+    flex-direction: column;
+    z-index: 2001;
+  }
+  .modal.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+  }
+  .modal-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .modal-head h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .modal-search {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .modal-search input {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+  }
+  .modal-search input:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px 16px;
+  }
+  .site {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+    font-size: 12.5px;
+    margin-bottom: 6px;
+  }
+  .site .s-num {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: var(--surface);
+    color: var(--text-muted);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .site .s-sector {
+    flex-shrink: 0;
+    padding: 2px 7px;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .site .s-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .site .s-url {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--primary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ============================================================
+     TOASTS
+     ============================================================ */
+  .toasts {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 5000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--r-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    box-shadow: var(--shadow-md);
+    animation: slideIn .25s ease;
+  }
+  .toast.success { border-left-color: var(--success); }
+  .toast.error   { border-left-color: var(--danger); }
+  .toast.warning { border-left-color: var(--warning); }
+  @keyframes slideIn {
+    from { transform: translateY(-8px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* ============================================================
+     CONFIRM DIALOG
+     ============================================================ */
+  .confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(16,24,40,.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 3000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+  }
+  .confirm-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .confirm {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 20px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    transform: scale(.95);
+    transition: transform .2s;
+  }
+  .confirm-backdrop.show .confirm { transform: scale(1); }
+  .confirm h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .confirm p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .confirm-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .confirm-btns .btn {
+    flex: 1;
+    min-height: 42px;
+  }
+  .btn-danger {
+    background: var(--danger);
+    color: #fff;
+  }
+  .btn-danger:hover:not(:disabled) { filter: brightness(1.05); }
+
+  /* ============================================================
+     INSTALL BANNER
+     ============================================================ */
+  .install {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-md);
+    z-index: 900;
+  }
+  .install.show { display: flex; }
+  .install-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary-soft);
+    border-radius: var(--r-sm);
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+  .install-icon svg {
+    width: 18px; height: 18px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .install-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .install-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .install-text span {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .install-close {
+    width: 28px; height: 28px;
+    display: grid;
+    place-items: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .install-close:hover { color: var(--text); }
+  .install-close svg {
+    width: 14px; height: 14px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  /* ============================================================
+     VIEW SWITCHING
+     ============================================================ */
+  .view { display: none; }
+  .view.active { display: block; }
+  .hide { display: none !important; }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 480px) {
+    body { padding: 8px; padding-bottom: 20px; }
+    .app { padding: 12px; border-radius: var(--r-sm); }
+    .q-card { padding: 14px; }
+    .q-text { font-size: 14.5px; }
+    .opt { padding: 11px 12px; font-size: 13.5px; }
+    .title-block h1 { font-size: 15px; }
+    .grid-dots { grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toasts" id="toasts"></div>
+
+<div class="app">
+
+  <!-- ============================================================
+       TOP BAR
+       ============================================================ -->
+  <div class="top-bar">
+    <div class="top-row-1">
+      <div class="title-block">
+        <h1 id="pageTitle">Practice</h1>
+        <div class="subtitle" id="pageSubtitle"></div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="refreshBtn" aria-label="Refresh" title="Refresh questions">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+        </button>
+        <button class="icon-btn" id="drawerBtn" aria-label="Filters" title="Filters">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="top-row-2">
+      <div class="mode-drop" id="modeDrop">
+        <button class="mode-btn" id="modeBtn" type="button">
+          <span id="modeLabel">Practice</span>
+          <span class="caret">▾</span>
+        </button>
+        <div class="mode-menu" id="modeMenu">
+          <button data-mode="mcq" class="active">Practice</button>
+          <button data-mode="read">Solutions</button>
+          <button data-mode="facts">Facts</button>
+          <button data-mode="papers">Past papers</button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats">
+        <span><b id="attemptedCount">0</b>/<span id="totalCount">0</span></span>
+        <span class="sep">·</span>
+        <span class="timer" id="timerDisplay">00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PROGRESS
+       ============================================================ -->
+  <div class="progress" id="progressWrap">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- ============================================================
+       VIEW: MCQ PRACTICE
+       ============================================================ -->
+  <div class="view active" id="viewMcq">
+    <div class="q-card">
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsList"></div>
+      <div id="feedbackSlot"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-ghost" id="prevBtn">Back</button>
+      <button class="btn btn-primary" id="nextBtn">Next</button>
+    </div>
+
+    <div class="overview" id="overviewBlock">
+      <details id="overviewDetails">
+        <summary>
+          <span>Overview</span>
+          <span class="ov-stats" id="ovStats">0 done · <span class="ok">0 correct</span> · <span class="no">0 wrong</span></span>
+        </summary>
+        <div class="grid-dots" id="dotGrid"></div>
+      </details>
+    </div>
+
+    <div class="end-wrap" id="endWrap">
+      <button class="btn btn-success" id="endBtn">End quiz</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       VIEW: RESULT
+       ============================================================ -->
+  <div class="view" id="viewResult">
+    <div class="result-head">
+      <div class="result-score" id="resultScore">0 / 0</div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-sub" id="resultSub"></div>
+    </div>
+    <div class="result-list" id="resultList"></div>
+    <div id="resultCtaSlot"></div>
+    <div class="actions" style="margin-top:16px">
+      <button class="btn btn-ghost" id="restartBtn">Try again</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       VIEW: SOLUTIONS (read mode)
+       ============================================================ -->
+  <div class="view" id="viewRead">
+    <div class="search-bar" id="readSearchBar">
+      <input type="text" id="readSearch" placeholder="Search questions, options, topics…" autocomplete="off">
+      <span class="count" id="readCount"></span>
+      <button class="clear" id="readClear">Clear</button>
+    </div>
+    <div class="list" id="readList"></div>
+  </div>
+
+  <!-- ============================================================
+       VIEW: FACTS
+       ============================================================ -->
+  <div class="view" id="viewFacts">
+    <div class="search-bar" id="factsSearchBar">
+      <input type="text" id="factsSearch" placeholder="Search facts, answers, topics…" autocomplete="off">
+      <span class="count" id="factsCount"></span>
+      <button class="clear" id="factsClear">Clear</button>
+    </div>
+    <div class="list" id="factsList"></div>
+  </div>
+
+  <!-- ============================================================
+       VIEW: PAPERS
+       ============================================================ -->
+  <div class="view" id="viewPapers">
+    <div class="papers-wrap">
+      <iframe id="papersFrame" data-src="page-papers.html" title="FPSC solved papers" loading="lazy"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     DRAWER: FILTERS
+     ============================================================ -->
+<div class="sheet-backdrop" id="drawerBackdrop"></div>
+<aside class="sheet" id="drawer" aria-hidden="true">
+  <div class="sheet-head">
+    <h2>Filters</h2>
+    <button class="sheet-close" id="drawerClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="sheet-body">
+    <div class="sheet-user">
+      <div class="avatar" id="userAvatar">U</div>
+      <div class="name" id="userName">User</div>
+      <button class="logout" id="logoutBtn">Sign out</button>
+    </div>
+
+    <div class="sheet-section">
+      <h3>Jobs</h3>
+      <div class="check-list" id="jobList"></div>
+    </div>
+
+    <div class="sheet-section">
+      <h3>Subjects</h3>
+      <div class="check-list" id="subjList"></div>
+    </div>
+
+    <div class="sheet-section">
+      <button class="btn btn-ghost" id="jobSitesBtn" style="width:100%">Browse job websites</button>
+    </div>
+  </div>
+
+  <div class="sheet-foot">
+    <button class="btn btn-ghost" id="drawerReset">Reset</button>
+    <button class="btn btn-primary" id="drawerApply">Apply filters</button>
+  </div>
+</aside>
+
+<!-- ============================================================
+     MODAL: JOB WEBSITES
+     ============================================================ -->
+<div class="modal-backdrop" id="sitesBackdrop"></div>
+<div class="modal" id="sitesModal" role="dialog" aria-modal="true">
+  <div class="modal-head">
+    <h2>Job websites</h2>
+    <button class="sheet-close" id="sitesClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+    </button>
+  </div>
+  <div class="modal-search">
+    <input type="text" id="sitesSearch" placeholder="Search by sector, name or URL…" autocomplete="off">
+  </div>
+  <div class="modal-body" id="sitesList">
+    <div class="empty">Loading…</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CONFIRM DIALOG
+     ============================================================ -->
+<div class="confirm-backdrop" id="confirmBackdrop">
+  <div class="confirm">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMsg">This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" id="confirmCancel">Cancel</button>
+      <button class="btn btn-primary" id="confirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     INSTALL BANNER
+     ============================================================ -->
+<div class="install" id="installBanner">
+  <div class="install-icon">
+    <svg viewBox="0 0 24 24"><path d="M12 3v12M6 9l6 6 6-6M5 21h14"/></svg>
+  </div>
+  <div class="install-text">
+    <strong>Install Self Learners</strong>
+    <span>Quick access from your home screen</span>
+  </div>
+  <button class="install-close" id="installClose" aria-label="Dismiss">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+  </button>
+</div>
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     CONSTANTS
+     ============================================================ */
+  const QUIZ_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyB_I39SsLmQC5C8O1KkzZEUgFPAIJQ95k0vFj9M-HX8vI9hsdLh0GFYYO8O1QFnvP4vWkAh3nmbd3/pub?output=csv';
+  const FACTS_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRO-FPemOqN9exgEgDyt_x1KfNgTAxf0mOeg16c7THfRaaHg0mbgwuTrObcbIwJKSx2dWtrQCNcrCV/pub?output=csv';
+  const JOBSITES_URL = 'https://docs.google.com/spreadsheets/d/108C9USSy1WysOwKThC1JFsL5OfjSC3HAX5EysDMw4gM/gviz/tq?tqx=out:csv&gid=614189291';
+
+  const KEY_QUIZ          = 'slQuizV4';
+  const KEY_USER          = 'slUser';
+  const KEY_MODE          = 'slMode';
+  const KEY_FACTS_READ    = 'slFactsRead';
+  const KEY_INSTALL_HIDE  = 'slInstallDismissed';
+
+  const GUEST_LIMIT       = 15;
+  const LETTERS           = ['A', 'B', 'C', 'D'];
+
+  /* ============================================================
+     DOM CACHE
+     ============================================================ */
+  const $ = (id) => document.getElementById(id);
+
+  const ui = {
+    toasts:          $('toasts'),
+    pageTitle:       $('pageTitle'),
+    pageSubtitle:    $('pageSubtitle'),
+    refreshBtn:      $('refreshBtn'),
+    drawerBtn:       $('drawerBtn'),
+    modeDrop:        $('modeDrop'),
+    modeBtn:         $('modeBtn'),
+    modeLabel:       $('modeLabel'),
+    modeMenu:        $('modeMenu'),
+    stats:           $('stats'),
+    attemptedCount:  $('attemptedCount'),
+    totalCount:      $('totalCount'),
+    timerDisplay:    $('timerDisplay'),
+    progressWrap:    $('progressWrap'),
+    progressFill:    $('progressFill'),
+
+    viewMcq:         $('viewMcq'),
+    viewResult:      $('viewResult'),
+    viewRead:        $('viewRead'),
+    viewFacts:       $('viewFacts'),
+    viewPapers:      $('viewPapers'),
+
+    qText:           $('qText'),
+    optionsList:     $('optionsList'),
+    feedbackSlot:    $('feedbackSlot'),
+    prevBtn:         $('prevBtn'),
+    nextBtn:         $('nextBtn'),
+    overviewBlock:   $('overviewBlock'),
+    overviewDetails: $('overviewDetails'),
+    ovStats:         $('ovStats'),
+    dotGrid:         $('dotGrid'),
+    endWrap:         $('endWrap'),
+    endBtn:          $('endBtn'),
+
+    resultScore:     $('resultScore'),
+    resultMsg:       $('resultMsg'),
+    resultSub:       $('resultSub'),
+    resultList:      $('resultList'),
+    resultCtaSlot:   $('resultCtaSlot'),
+    restartBtn:      $('restartBtn'),
+
+    readSearchBar:   $('readSearchBar'),
+    readSearch:      $('readSearch'),
+    readCount:       $('readCount'),
+    readClear:       $('readClear'),
+    readList:        $('readList'),
+
+    factsSearchBar:  $('factsSearchBar'),
+    factsSearch:     $('factsSearch'),
+    factsCount:      $('factsCount'),
+    factsClear:      $('factsClear'),
+    factsList:       $('factsList'),
+
+    papersFrame:     $('papersFrame'),
+
+    drawerBackdrop:  $('drawerBackdrop'),
+    drawer:          $('drawer'),
+    drawerClose:     $('drawerClose'),
+    drawerReset:     $('drawerReset'),
+    drawerApply:     $('drawerApply'),
+    jobList:         $('jobList'),
+    subjList:        $('subjList'),
+    userAvatar:      $('userAvatar'),
+    userName:        $('userName'),
+    logoutBtn:       $('logoutBtn'),
+    jobSitesBtn:     $('jobSitesBtn'),
+
+    sitesBackdrop:   $('sitesBackdrop'),
+    sitesModal:      $('sitesModal'),
+    sitesClose:      $('sitesClose'),
+    sitesSearch:     $('sitesSearch'),
+    sitesList:       $('sitesList'),
+
+    confirmBackdrop: $('confirmBackdrop'),
+    confirmTitle:    $('confirmTitle'),
+    confirmMsg:      $('confirmMsg'),
+    confirmOk:       $('confirmOk'),
+    confirmCancel:   $('confirmCancel'),
+
+    installBanner:   $('installBanner'),
+    installClose:    $('installClose')
+  };
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  const state = {
+    mode: 'mcq',
+    user: null,
+    isGuest: false,
+
+    questions: [],
+    original: [],
+    total: 0,
+    current: 0,
+    answers: [],
+    status: [],      // null | true | false
+    locked: [],      // bool per question
+    invalid: [],     // indices where correctIdx === -1
+
+    submitted: false,
+    finished: false,
+    score: 0,
+    timeLeft: 0,
+    timerHandle: null,
+    timerRunning: false,
+
+    selJobs: [],
+    selSubjs: [],
+    availJobs: [],
+    availSubjs: [],
+
+    facts: [],
+    factsLoaded: false,
+    factsLoading: false,
+    factsReadSet: new Set(),
+
+    readQuery: '',
+    factsQuery: '',
+
+    jobSites: [],
+    jobSitesLoaded: false,
+    jobSitesLoading: false,
+    jobSitesQuery: '',
+
+    papersLoaded: false,
+    deferredPrompt: null
+  };
+
+  /* ============================================================
+     SMALL HELPERS
+     ============================================================ */
+  const clean = (v) => {
+    if (v == null) return '';
+    return String(v)
+      .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
+  const escapeHtml = (str) => {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
+  const sameText = (a, b) => {
+    if (!a || !b) return false;
+    return clean(a).toLowerCase() === clean(b).toLowerCase();
+  };
+
+  const titleCase = (str) => {
+    if (!str) return '';
+    return clean(str)
+      .split(/(\s+|\/|-)/)
+      .map((chunk) => {
+        if (/^[\s\/-]+$/.test(chunk)) return chunk;
+        if (/^[A-Z]{2,5}$/.test(chunk)) return chunk;
+        return chunk.charAt(0).toUpperCase() + chunk.slice(1).toLowerCase();
+      })
+      .join('');
+  };
+
+  const shuffle = (arr) => {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  const parseLine = (line) => {
+    const out = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') inQuotes = false;
+        else cur += ch;
+      } else {
+        if (ch === '"') inQuotes = true;
+        else if (ch === ',') { out.push(clean(cur)); cur = ''; }
+        else cur += ch;
+      }
+    }
+    out.push(clean(cur));
+    return out;
+  };
+
+  const openSearch = (q, subject, topic) => {
+    const parts = [q];
+    if (subject) parts.push(subject);
+    if (topic) parts.push(topic);
+    const query = parts.join(' ').substring(0, 1900);
+    window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank', 'noopener');
+  };
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  let toastTimer = null;
+  function toast(message, type, duration) {
+    type = type || 'info';
+    duration = duration || 3500;
+    if (toastTimer) clearTimeout(toastTimer);
+    ui.toasts.innerHTML = '';
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = message;
+    ui.toasts.appendChild(el);
+    toastTimer = setTimeout(() => {
+      el.style.transition = 'opacity .25s';
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 280);
+    }, duration);
+  }
+
+  /* ============================================================
+     CONFIRM
+     ============================================================ */
+  let confirmResolve = null;
+  function confirmDialog(opts) {
+    opts = opts || {};
+    ui.confirmTitle.textContent = opts.title || 'Are you sure?';
+    ui.confirmMsg.textContent   = opts.message || '';
+    ui.confirmOk.textContent    = opts.okText || 'Confirm';
+    ui.confirmOk.className      = 'btn ' + (opts.danger ? 'btn-danger' : 'btn-primary');
+    ui.confirmBackdrop.classList.add('show');
+    return new Promise((resolve) => { confirmResolve = resolve; });
+  }
+  function closeConfirm(result) {
+    ui.confirmBackdrop.classList.remove('show');
+    if (confirmResolve) { confirmResolve(result); confirmResolve = null; }
+  }
+  ui.confirmOk.addEventListener('click', () => closeConfirm(true));
+  ui.confirmCancel.addEventListener('click', () => closeConfirm(false));
+  ui.confirmBackdrop.addEventListener('click', (e) => {
+    if (e.target === ui.confirmBackdrop) closeConfirm(false);
+  });
+
+  /* ============================================================
+     STORAGE
+     ============================================================ */
+  function saveFactsReadSet() {
+    try {
+      localStorage.setItem(KEY_FACTS_READ, JSON.stringify([...state.factsReadSet]));
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveQuizState() {
+    if (state.isGuest) return;
+    try {
+      localStorage.setItem(KEY_QUIZ, JSON.stringify({
+        questions: state.questions,
+        original:  state.original,
+        total:     state.total,
+        current:   state.current,
+        answers:   state.answers,
+        status:    state.status,
+        locked:    state.locked,
+        invalid:   state.invalid,
+        submitted: state.submitted,
+        finished:  state.finished,
+        score:     state.score,
+        timeLeft:  state.timeLeft,
+        selJobs:   state.selJobs,
+        selSubjs:  state.selSubjs
+      }));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadQuizState() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY_QUIZ) || 'null');
+      if (raw && raw.questions && raw.questions.length) return raw;
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
+  function clearQuizState() {
+    try { localStorage.removeItem(KEY_QUIZ); } catch (e) { /* ignore */ }
+  }
+
+  /* ============================================================
+     VIEW SWITCHING
+     ============================================================ */
+  const VIEWS = ['viewMcq', 'viewResult', 'viewRead', 'viewFacts', 'viewPapers'];
+
+  function showView(id) {
+    VIEWS.forEach((v) => ui[v].classList.toggle('active', v === id));
+    // Progress + end are only meaningful in MCQ view
+    ui.progressWrap.style.display = id === 'viewMcq' || id === 'viewResult' ? '' : 'none';
+    ui.stats.classList.toggle('hide-timer', !(id === 'viewMcq' || id === 'viewResult'));
+  }
+
+  /* ============================================================
+     MODE
+     ============================================================ */
+  const MODE_META = {
+    mcq:    { label: 'Practice',     title: 'Practice',      subtitle: '' },
+    read:   { label: 'Solutions',    title: 'Solutions',     subtitle: 'All questions with correct answers' },
+    facts:  { label: 'Facts',        title: 'Facts',         subtitle: 'One-tap fact cards' },
+    papers: { label: 'Past papers',  title: 'Past papers',   subtitle: 'FPSC solved papers archive' }
+  };
+
+  function setMode(mode, silent) {
+    if (!MODE_META[mode]) mode = 'mcq';
+    state.mode = mode;
+
+    // Update dropdown
+    ui.modeLabel.textContent = MODE_META[mode].label;
+    ui.modeMenu.querySelectorAll('button').forEach((b) => {
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    ui.modeDrop.classList.remove('open');
+
+    // Update title
+    ui.pageTitle.textContent = MODE_META[mode].title;
+    updateSubtitle();
+
+    // Switch view
+    if (mode === 'mcq') {
+      if (state.finished) showView('viewResult');
+      else showView('viewMcq');
+      renderQuestion();
+      renderDots();
+      updateOverview();
+    } else if (mode === 'read') {
+      showView('viewRead');
+      renderRead();
+    } else if (mode === 'facts') {
+      showView('viewFacts');
+      if (!state.factsLoaded && !state.factsLoading) loadFacts(renderFacts);
+      else renderFacts();
+    } else if (mode === 'papers') {
+      showView('viewPapers');
+      ensurePapersLoaded();
+    }
+
+    try { localStorage.setItem(KEY_MODE, mode); } catch (e) { /* ignore */ }
+
+    if (!silent) {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'SL_SET_MODE_FROM_EDU', mode }, '*');
+        }
+      } catch (e) { /* ignore */ }
+    }
+  }
+
+  function updateSubtitle() {
+    const m = state.mode;
+    if (m === 'mcq') {
+      const parts = [];
+      if (state.selJobs.length === 1) parts.push(titleCase(state.selJobs[0]));
+      else if (state.selJobs.length > 1) parts.push(state.selJobs.length + ' jobs');
+      if (state.selSubjs.length) parts.push(state.selSubjs.length + ' subjects');
+      ui.pageSubtitle.textContent = parts.length ? parts.join(' · ') : 'All questions';
+    } else {
+      ui.pageSubtitle.textContent = MODE_META[m].subtitle;
+    }
+  }
+
+  /* ============================================================
+     FILTERS (list rendering for drawer)
+     ============================================================ */
+  function rebuildFilterLists() {
+    // Jobs
+    const jobSet = new Set();
+    state.original.forEach((q) => { if (q.job) jobSet.add(q.job); });
+    state.availJobs = [...jobSet].sort();
+
+    // Subjects (respect job filter)
+    const subjSet = new Set();
+    state.original.forEach((q) => {
+      if (!q.subject) return;
+      if (state.selJobs.length && !state.selJobs.some((j) => sameText(j, q.job))) return;
+      subjSet.add(q.subject);
+    });
+    state.availSubjs = [...subjSet].sort();
+
+    // Prune selected subjects no longer available
+    state.selSubjs = state.selSubjs.filter((s) =>
+      state.availSubjs.some((a) => sameText(a, s))
+    );
+
+    renderFilterList(ui.jobList, state.availJobs, state.selJobs, (val, checked) => {
+      toggleFilter('job', val, checked);
+    });
+    renderFilterList(ui.subjList, state.availSubjs, state.selSubjs, (val, checked) => {
+      toggleFilter('subj', val, checked);
+    });
+  }
+
+  function renderFilterList(container, options, selected, onChange) {
+    if (!options.length) {
+      container.innerHTML = '<div style="padding:8px 10px;color:var(--text-muted);font-size:12px">No options available</div>';
+      return;
+    }
+    container.innerHTML = '';
+    options.forEach((opt) => {
+      const checked = selected.some((s) => sameText(s, opt));
+      const label = document.createElement('label');
+      label.className = 'check' + (checked ? ' checked' : '');
+      label.innerHTML =
+        '<input type="checkbox"' + (checked ? ' checked' : '') + '>' +
+        '<span>' + escapeHtml(titleCase(opt)) + '</span>';
+      const input = label.querySelector('input');
+      input.addEventListener('change', () => {
+        label.classList.toggle('checked', input.checked);
+        onChange(opt, input.checked);
+      });
+      container.appendChild(label);
+    });
+  }
+
+  function toggleFilter(kind, value, checked) {
+    if (kind === 'job') {
+      if (checked) {
+        if (!state.selJobs.some((j) => sameText(j, value))) state.selJobs.push(value);
+      } else {
+        state.selJobs = state.selJobs.filter((j) => !sameText(j, value));
+      }
+    } else {
+      if (checked) {
+        if (!state.selSubjs.some((s) => sameText(s, value))) state.selSubjs.push(value);
+      } else {
+        state.selSubjs = state.selSubjs.filter((s) => !sameText(s, value));
+      }
+    }
+    rebuildFilterLists();
+  }
+
+  /* ============================================================
+     QUESTIONS: FETCH + BUILD
+     ============================================================ */
+  function resolveCorrectIndex(raw, options) {
+    if (!raw) return -1;
+    const r = clean(raw);
+
+    // Direct match
+    for (let i = 0; i < options.length; i++) {
+      if (clean(options[i]) === r) return i;
+    }
+    // Case-insensitive
+    const rl = r.toLowerCase();
+    for (let i = 0; i < options.length; i++) {
+      if (clean(options[i]).toLowerCase() === rl) return i;
+    }
+    // Letter
+    if (/^[A-Da-d]$/.test(r)) return 'abcd'.indexOf(r.toLowerCase());
+    // Number 1–4
+    if (/^[1-4]$/.test(r)) return parseInt(r, 10) - 1;
+    // Prefixed letter like "Option A" or "(A)"
+    const m = r.match(/^(?:option\s*|opt\.?\s*)?[\(\[\{\-]?\s*([A-Da-d])\s*[\)\]\}\.\-:]?/i);
+    if (m && m[1]) return 'abcd'.indexOf(m[1].toLowerCase());
+    return -1;
+  }
+
+  async function fetchQuestions(force) {
+    // Reset to MCQ view
+    showView('viewMcq');
+    ui.qText.textContent = 'Loading questions…';
+    ui.optionsList.innerHTML = '';
+    ui.feedbackSlot.innerHTML = '';
+    ui.prevBtn.disabled = ui.nextBtn.disabled = ui.endBtn.disabled = true;
+    ui.refreshBtn.classList.add('spin');
+
+    // Restore from storage if not forcing
+    if (!force && !state.isGuest) {
+      const saved = loadQuizState();
+      if (saved) {
+        applySavedState(saved);
+        ui.refreshBtn.classList.remove('spin');
+        ui.prevBtn.disabled = ui.nextBtn.disabled = ui.endBtn.disabled = false;
+        if (state.finished) showView('viewResult');
+        else {
+          renderQuestion();
+          renderDots();
+          updateOverview();
+          startTimer();
+        }
+        // If mode is read/facts/papers, keep it
+        if (state.mode !== 'mcq') setMode(state.mode, true);
+        return;
+      }
+    }
+
+    if (force) {
+      clearQuizState();
+      stopTimer();
+    }
+
+    try {
+      const url = QUIZ_URL + (QUIZ_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const lines = text.split('\n').filter((l) => l.trim());
+
+      state.original = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const c = parseLine(lines[i]);
+        if (c.length < 9) continue;
+
+        const qText = c[1] ? c[1].trim() : '';
+        if (!qText) continue;
+
+        const options = [c[2] || '', c[3] || '', c[4] || '', c[5] || ''].map((x) => x.trim());
+        const rawCorrect = c[6] ? c[6].trim() : '';
+        const correctIdx = resolveCorrectIndex(rawCorrect, options);
+
+        const showFlag = c[13] ? c[13].trim().toLowerCase() : '';
+        if (showFlag === '0' || showFlag === 'false' || showFlag === 'no') continue;
+
+        state.original.push({
+          question: qText,
+          options,
+          correct: correctIdx,
+          correctText: rawCorrect || 'No answer',
+          topic: c[7] || '',
+          subject: c[8] || '',
+          job: c[10] || ''
+        });
+      }
+
+      rebuildFilterLists();
+
+      // Apply filters
+      let filtered = state.original;
+      if (state.selJobs.length) filtered = filtered.filter((q) => state.selJobs.some((j) => sameText(j, q.job)));
+      if (state.selSubjs.length) filtered = filtered.filter((q) => state.selSubjs.some((s) => sameText(s, q.subject)));
+
+      if (!filtered.length) {
+        toast('No questions match filters. Showing all.', 'warning');
+        filtered = state.original;
+        state.selJobs = [];
+        state.selSubjs = [];
+        rebuildFilterLists();
+      }
+
+      // Shuffle options inside each question
+      state.questions = filtered.map((q) => {
+        const shuffled = shuffle(q.options);
+        const newCorrect = shuffled.indexOf(q.options[q.correct]);
+        return Object.assign({}, q, { options: shuffled, correct: newCorrect });
+      });
+
+      state.total = state.questions.length;
+      state.current = 0;
+      state.answers = new Array(state.total).fill(null);
+      state.status  = new Array(state.total).fill(null);
+      state.locked  = new Array(state.total).fill(false);
+      state.submitted = false;
+      state.finished = false;
+      state.score = 0;
+      state.timeLeft = state.total * 60;
+      state.invalid = [];
+
+      state.questions.forEach((q, i) => {
+        if (q.correct === -1 && q.correctText && q.correctText.trim() && q.correctText !== 'No answer') {
+          state.invalid.push(i);
+        }
+      });
+
+      ui.totalCount.textContent = state.total;
+      ui.attemptedCount.textContent = 0;
+      ui.refreshBtn.classList.remove('spin');
+      ui.prevBtn.disabled = ui.nextBtn.disabled = ui.endBtn.disabled = false;
+
+      updateSubtitle();
+      renderQuestion();
+      renderDots();
+      updateOverview();
+      updateTimerDisplay();
+      startTimer();
+      saveQuizState();
+
+      if (force) toast('Loaded ' + state.total + ' questions', 'success', 2500);
+    } catch (e) {
+      ui.qText.textContent = 'Failed to load questions.';
+      ui.optionsList.innerHTML = '<div class="empty error">Check your connection and tap the refresh icon.</div>';
+      ui.refreshBtn.classList.remove('spin');
+      toast('Failed to load questions', 'error');
+    }
+  }
+
+  function applySavedState(saved) {
+    state.questions = saved.questions || [];
+    state.original  = saved.original || state.questions.map((q) => Object.assign({}, q));
+    state.total     = saved.total || state.questions.length;
+    state.current   = saved.current || 0;
+    state.answers   = saved.answers || new Array(state.total).fill(null);
+    state.status    = saved.status || new Array(state.total).fill(null);
+    state.locked    = saved.locked || new Array(state.total).fill(false);
+    state.invalid   = saved.invalid || [];
+    state.submitted = !!saved.submitted;
+    state.finished  = !!saved.finished;
+    state.score     = saved.score || 0;
+    state.timeLeft  = saved.timeLeft || state.total * 60;
+    state.selJobs   = saved.selJobs || [];
+    state.selSubjs  = saved.selSubjs || [];
+
+    rebuildFilterLists();
+    ui.totalCount.textContent = state.total;
+    ui.attemptedCount.textContent = attemptedCount();
+    updateSubtitle();
+  }
+
+  /* ============================================================
+     QUESTION RENDER
+     ============================================================ */
+  function attemptedCount() {
+    return state.answers.filter((a) => a !== null).length;
+  }
+
+  function renderQuestion() {
+    if (!state.questions.length) {
+      ui.qText.textContent = 'No questions loaded.';
+      ui.optionsList.innerHTML = '';
+      return;
+    }
+
+    const q = state.questions[state.current];
+    const answered = state.locked[state.current] || state.submitted || state.finished;
+
+    ui.qText.innerHTML =
+      '<span class="q-num">' + (state.current + 1) + '.</span>' + escapeHtml(q.question);
+    ui.qText.onclick = () => openSearch(q.question, q.subject, q.topic);
+
+    let html = '';
+    q.options.forEach((opt, i) => {
+      let cls = 'opt';
+      let indicator = '';
+
+      if (state.answers[state.current] === i) cls += ' selected';
+      if (answered) {
+        if (q.correct !== -1 && i === q.correct) { cls += ' correct'; indicator = '<span class="ind">✓</span>'; }
+        if (state.answers[state.current] === i && state.answers[state.current] !== q.correct) {
+          cls += ' wrong'; indicator = '<span class="ind">✗</span>';
+        }
+      }
+
+      html +=
+        '<button class="' + cls + '" data-i="' + i + '"' + (answered ? ' disabled' : '') + '>' +
+          '<span class="letter">' + LETTERS[i] + '</span>' +
+          '<span class="opt-label">' + escapeHtml(opt || '(empty)') + '</span>' +
+          indicator +
+        '</button>';
+    });
+    ui.optionsList.innerHTML = html;
+
+    if (!answered) {
+      ui.optionsList.querySelectorAll('.opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (state.locked[state.current] || state.submitted || state.finished) return;
+          state.locked[state.current] = true;
+          state.answers[state.current] = parseInt(btn.dataset.i, 10);
+          renderQuestion();
+          renderDots(state.current);
+          updateProgress();
+          updateOverview();
+          saveQuizState();
+        });
+      });
+    }
+
+    // Feedback + meta
+    let feedbackHtml = '';
+    if (state.locked[state.current] && !state.submitted && !state.finished) {
+      const ok = state.answers[state.current] === q.correct;
+      feedbackHtml +=
+        '<div class="feedback ' + (ok ? 'ok' : 'no') + '">' +
+          (ok ? 'Correct answer' : 'Correct answer: ' + escapeHtml(q.options[q.correct] || '—')) +
+        '</div>';
+
+      const metaChips = [];
+      if (q.subject) metaChips.push('<span class="m-chip">' + escapeHtml(titleCase(q.subject)) + '</span>');
+      if (q.topic)   metaChips.push('<span class="m-chip">' + escapeHtml(titleCase(q.topic)) + '</span>');
+      if (q.job)     metaChips.push('<span class="m-chip">' + escapeHtml(titleCase(q.job)) + '</span>');
+      if (metaChips.length) {
+        feedbackHtml += '<div class="q-meta">' + metaChips.join('') + '</div>';
+      }
+    }
+    ui.feedbackSlot.innerHTML = feedbackHtml;
+
+    // Button state
+    const atGuestLimit = state.isGuest && state.current >= GUEST_LIMIT - 1;
+    ui.prevBtn.disabled = state.current === 0 || state.finished;
+    ui.nextBtn.disabled = state.current === state.total - 1 || state.finished || atGuestLimit;
+
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const att = attemptedCount();
+    ui.attemptedCount.textContent = att;
+    const pct = state.total ? (att / state.total) * 100 : 0;
+    ui.progressFill.style.width = pct + '%';
+  }
+
+  /* ============================================================
+     DOT GRID
+     ============================================================ */
+  function renderDots(active) {
+    if (!state.total) { ui.dotGrid.innerHTML = ''; return; }
+
+    let html = '';
+    for (let i = 0; i < state.total; i++) {
+      const locked = state.isGuest && i >= GUEST_LIMIT;
+      let cls = 'dot';
+
+      if (locked) cls += ' locked';
+      else if (state.answers[i] !== null) {
+        if (state.submitted || state.finished) {
+          if (state.status[i] === true) cls += ' correct';
+          else if (state.status[i] === false) cls += ' wrong';
+          else cls += ' pending';
+        } else {
+          const q = state.questions[i];
+          cls += (state.answers[i] === q.correct) ? ' correct' : ' wrong';
+        }
+      } else {
+        cls += ' pending';
+      }
+
+      if (active !== undefined && i === active) cls += ' active';
+
+      html += '<button class="' + cls + '" data-i="' + i + '">' + (i + 1) + '</button>';
+    }
+    ui.dotGrid.innerHTML = html;
+
+    ui.dotGrid.querySelectorAll('.dot').forEach((d) => {
+      d.addEventListener('click', () => {
+        const i = parseInt(d.dataset.i, 10);
+        if (state.isGuest && i >= GUEST_LIMIT) { promptGuestLimit(); return; }
+        state.current = i;
+        renderQuestion();
+        renderDots(i);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
+
+  function updateOverview() {
+    let done = 0, pending = 0, correct = 0, wrong = 0;
+    for (let i = 0; i < state.total; i++) {
+      if (state.answers[i] !== null) {
+        done++;
+        if (state.submitted || state.finished) {
+          if (state.status[i] === true) correct++;
+          else if (state.status[i] === false) wrong++;
+        } else {
+          const q = state.questions[i];
+          if (q && state.answers[i] === q.correct) correct++;
+          else wrong++;
+        }
+      } else {
+        pending++;
+      }
+    }
+    ui.ovStats.innerHTML =
+      done + ' done · ' +
+      '<span class="ok">' + correct + ' correct</span> · ' +
+      '<span class="no">' + wrong + ' wrong</span>';
+  }
+
+  function promptGuestLimit() {
+    confirmDialog({
+      title: 'Sign in to continue',
+      message: 'Guests can only access the first ' + GUEST_LIMIT + ' questions.',
+      okText: 'Sign in',
+      danger: false
+    }).then((ok) => {
+      if (ok) triggerLogout();
+    });
+  }
+
+  /* ============================================================
+     TIMER
+     ============================================================ */
+  function startTimer() {
+    stopTimer();
+    state.timerRunning = true;
+    state.timerHandle = setInterval(() => {
+      if (!state.timerRunning) return;
+      if (state.finished || state.submitted) return;
+      state.timeLeft--;
+      updateTimerDisplay();
+      if (state.timeLeft <= 0) {
+        stopTimer();
+        state.timeLeft = 0;
+        gradeQuiz();
+        state.finished = true;
+        showResult();
+      }
+      // Persist every 15 seconds
+      if (state.timeLeft % 15 === 0) saveQuizState();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    state.timerRunning = false;
+    if (state.timerHandle) {
+      clearInterval(state.timerHandle);
+      state.timerHandle = null;
+    }
+  }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(Math.max(0, state.timeLeft) / 60);
+    const s = Math.max(0, state.timeLeft) % 60;
+    ui.timerDisplay.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    ui.timerDisplay.classList.remove('warning', 'danger');
+    if (state.timeLeft < 60) ui.timerDisplay.classList.add('danger');
+    else if (state.timeLeft < 300) ui.timerDisplay.classList.add('warning');
+  }
+
+  /* ============================================================
+     GRADE + RESULT
+     ============================================================ */
+  function gradeQuiz() {
+    let correct = 0;
+    for (let i = 0; i < state.questions.length; i++) {
+      const q = state.questions[i];
+      const a = state.answers[i];
+      if (state.invalid.includes(i) || q.correct === -1) { state.status[i] = null; continue; }
+      if (a !== null && a === q.correct) { state.status[i] = true; correct++; }
+      else if (a !== null) { state.status[i] = false; }
+      else { state.status[i] = null; }
+    }
+    state.score = correct;
+    state.submitted = true;
+    stopTimer();
+    saveQuizState();
+  }
+
+  function showResult() {
+    state.finished = true;
+    stopTimer();
+
+    const displayTotal = state.isGuest ? Math.min(state.total, GUEST_LIMIT) : state.total;
+    ui.resultScore.textContent = state.score + ' / ' + displayTotal;
+
+    if (state.isGuest) {
+      ui.resultMsg.textContent = 'Guest mode';
+      ui.resultSub.textContent = 'Limited to ' + GUEST_LIMIT + ' questions';
+    } else if (state.score === displayTotal) {
+      ui.resultMsg.textContent = 'Perfect score';
+      ui.resultSub.textContent = '';
+    } else if (state.score >= displayTotal * 0.7) {
+      ui.resultMsg.textContent = 'Well done';
+      ui.resultSub.textContent = '';
+    } else {
+      ui.resultMsg.textContent = 'Keep practising';
+      ui.resultSub.textContent = '';
+    }
+    // Build result list
+    const limit = state.isGuest ? Math.min(state.total, GUEST_LIMIT) : state.total;
+    let html = '';
+    for (let i = 0; i < limit; i++) {
+      const q = state.questions[i];
+      if (!q) continue;
+
+      const isInvalid = state.invalid.includes(i);
+      const ok = state.status[i] === true;
+      const no = state.status[i] === false;
+      let cls = 'result-item';
+      if (isInvalid) cls += ' invalid';
+      else if (ok) cls += ' ok';
+      else if (no) cls += ' no';
+      else cls += ' skip';
+
+      let answerLine = '';
+      if (isInvalid) {
+        answerLine = 'Invalid answer key: "' + escapeHtml(q.correctText) + '"';
+      } else if (q.correct === -1) {
+        answerLine = 'No correct answer available';
+      } else {
+        const userAnswer = state.answers[i] !== null && q.options[state.answers[i]]
+          ? q.options[state.answers[i]] : 'Not answered';
+        const correctAnswer = q.options[q.correct] || '—';
+
+        if (ok) {
+          answerLine = 'Your answer: <span class="ok">' + escapeHtml(userAnswer) + '</span>';
+        } else if (no) {
+          answerLine =
+            'Your answer: <span class="no">' + escapeHtml(userAnswer) + '</span> · ' +
+            'Correct: <span class="ok">' + escapeHtml(correctAnswer) + '</span>';
+        } else {
+          answerLine = 'Skipped · Correct: <span class="ok">' + escapeHtml(correctAnswer) + '</span>';
+        }
+      }
+
+      html +=
+        '<div class="' + cls + '">' +
+          '<div class="ri-q" data-idx="' + i + '">' +
+            (i + 1) + '. ' + escapeHtml(q.question) +
+          '</div>' +
+          '<div class="ri-a">' + answerLine + '</div>' +
+        '</div>';
+    }
+    ui.resultList.innerHTML = html;
+
+    ui.resultList.querySelectorAll('.ri-q').forEach((el) => {
+      el.addEventListener('click', () => {
+        const q = state.questions[parseInt(el.dataset.idx, 10)];
+        if (q) openSearch(q.question, q.subject, q.topic);
+      });
+    });
+
+    // Guest CTA
+    if (state.isGuest) {
+      ui.resultCtaSlot.innerHTML =
+        '<div class="guest-cta">' +
+          '<h3>Sign in to unlock all questions</h3>' +
+          '<p>You viewed ' + Math.min(state.total, GUEST_LIMIT) + ' of ' + state.total + ' questions as a guest.</p>' +
+          '<button class="btn btn-primary" id="resultSignIn" style="width:100%">Sign in</button>' +
+        '</div>';
+      const signIn = ui.resultCtaSlot.querySelector('#resultSignIn');
+      if (signIn) signIn.addEventListener('click', triggerLogout);
+    } else {
+      ui.resultCtaSlot.innerHTML = '';
+    }
+
+    showView('viewResult');
+    updateOverview();
+    renderDots();
+    updateProgress();
+    saveQuizState();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function restartQuiz() {
+    clearQuizState();
+    state.answers = new Array(state.total).fill(null);
+    state.status  = new Array(state.total).fill(null);
+    state.locked  = new Array(state.total).fill(false);
+    state.submitted = false;
+    state.finished = false;
+    state.score = 0;
+    state.current = 0;
+    state.timeLeft = state.total * 60;
+
+    // Reshuffle options
+    state.questions = state.questions.map((q) => {
+      const shuffled = shuffle(q.options);
+      const newCorrect = shuffled.indexOf(q.options[q.correct]);
+      return Object.assign({}, q, { options: shuffled, correct: newCorrect });
+    });
+
+    showView('viewMcq');
+    updateTimerDisplay();
+    startTimer();
+    renderQuestion();
+    renderDots();
+    updateOverview();
+    updateProgress();
+    saveQuizState();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ============================================================
+     READ MODE (Solutions)
+     ============================================================ */
+  function readMatches(q, query) {
+    if (!query) return true;
+    const nq = query.toLowerCase();
+    if (q.question && q.question.toLowerCase().indexOf(nq) !== -1) return true;
+    if (q.subject && q.subject.toLowerCase().indexOf(nq) !== -1) return true;
+    if (q.topic && q.topic.toLowerCase().indexOf(nq) !== -1) return true;
+    if (q.job && q.job.toLowerCase().indexOf(nq) !== -1) return true;
+    if (Array.isArray(q.options)) {
+      for (const opt of q.options) {
+        if (opt && String(opt).toLowerCase().indexOf(nq) !== -1) return true;
+      }
+    }
+    return false;
+  }
+
+  function renderRead() {
+    const limit = state.isGuest ? Math.min(state.total, GUEST_LIMIT) : state.total;
+
+    if (!state.total) {
+      ui.readList.innerHTML = '<div class="empty">No questions available</div>';
+      ui.readCount.textContent = '';
+      return;
+    }
+
+    let html = '';
+    let shown = 0;
+
+    for (let i = 0; i < limit; i++) {
+      const q = state.questions[i];
+      if (!q) continue;
+      if (!readMatches(q, state.readQuery)) continue;
+      shown++;
+
+      let optsHtml = '';
+      q.options.forEach((opt, oi) => {
+        const isCorrect = q.correct !== -1 && oi === q.correct && !state.invalid.includes(i);
+        optsHtml +=
+          '<div class="ri-opt' + (isCorrect ? ' ok' : '') + '">' +
+            '<span class="ro-l">' + LETTERS[oi] + '</span>' +
+            '<span>' + escapeHtml(opt || '(empty)') + '</span>' +
+          '</div>';
+      });
+
+      const metaChips = [];
+      if (q.subject) metaChips.push('<span class="rm">' + escapeHtml(titleCase(q.subject)) + '</span>');
+      if (q.topic)   metaChips.push('<span class="rm">' + escapeHtml(titleCase(q.topic)) + '</span>');
+      if (q.job)     metaChips.push('<span class="rm">' + escapeHtml(titleCase(q.job)) + '</span>');
+
+      html +=
+        '<div class="read-item">' +
+          '<div class="ri-head">' +
+            '<span class="ri-num">' + (i + 1) + '</span>' +
+            '<span class="ri-q" data-idx="' + i + '">' + escapeHtml(q.question) + '</span>' +
+          '</div>' +
+          '<div class="ri-opts">' + optsHtml + '</div>' +
+          (metaChips.length ? '<div class="ri-meta">' + metaChips.join('') + '</div>' : '') +
+        '</div>';
+    }
+
+    if (shown === 0) {
+      ui.readList.innerHTML = '<div class="empty">No questions match "' + escapeHtml(state.readQuery) + '"</div>';
+      ui.readCount.textContent = '0';
+    } else {
+      ui.readList.innerHTML = html;
+      ui.readCount.textContent = state.readQuery ? shown + ' found' : shown + ' total';
+
+      ui.readList.querySelectorAll('.ri-q').forEach((el) => {
+        el.addEventListener('click', () => {
+          const q = state.questions[parseInt(el.dataset.idx, 10)];
+          if (q) openSearch(q.question, q.subject, q.topic);
+        });
+      });
+    }
+
+    ui.readSearchBar.classList.toggle('has-text', ui.readSearch.value.length > 0);
+  }
+
+  ui.readSearch.addEventListener('input', () => {
+    state.readQuery = ui.readSearch.value.trim();
+    renderRead();
+  });
+  ui.readSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      ui.readSearch.value = '';
+      state.readQuery = '';
+      renderRead();
+      ui.readSearch.blur();
+    }
+  });
+  ui.readClear.addEventListener('click', () => {
+    ui.readSearch.value = '';
+    state.readQuery = '';
+    renderRead();
+    ui.readSearch.focus();
+  });
+
+  /* ============================================================
+     FACTS MODE
+     ============================================================ */
+  function interpretVerify(raw) {
+    if (raw === undefined || raw === null) return 'unknown';
+    const v = String(raw).trim().toLowerCase();
+    if (v === '') return 'unknown';
+    if (v === 'true' || v === 'yes' || v === '1' || v === 'y' || v === 't') return 'true';
+    if (v === 'false' || v === 'no' || v === '0' || v === 'n' || v === 'f') return 'false';
+    return 'unknown';
+  }
+
+  async function loadFacts(cb) {
+    if (state.factsLoaded) { if (cb) cb(); return; }
+    if (state.factsLoading) return;
+    state.factsLoading = true;
+
+    ui.factsList.innerHTML = '<div class="empty">Loading facts…</div>';
+
+    try {
+      const url = FACTS_URL + (FACTS_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const lines = text.split('\n').filter((l) => l.trim());
+
+      state.facts = [];
+
+      if (lines.length >= 2) {
+        const headers = parseLine(lines[0]).map((h) => h.toLowerCase());
+        const find = (keys, fallback) => {
+          for (let k = 0; k < headers.length; k++) {
+            const h = headers[k];
+            if (keys.some((kw) => h.indexOf(kw) !== -1)) return k;
+          }
+          return fallback;
+        };
+
+        const idx = {
+          srno:   find(['srno', 'sr no', 's.no', 'serial'], 0),
+          q:      find(['question'], 1),
+          a:      find(['answer'], 2),
+          topic:  find(['question topic', 'topic'], 3),
+          subj:   find(['subject'], 4),
+          verify: find(['verify'], 5),
+          created:find(['created'], 6)
+        };
+
+        for (let i = 1; i < lines.length; i++) {
+          const c = parseLine(lines[i]);
+          if (!c.length) continue;
+          const question = c[idx.q] ? c[idx.q].trim() : '';
+          if (!question) continue;
+
+          state.facts.push({
+            srno:     c[idx.srno]    ? c[idx.srno].trim()    : String(i),
+            question,
+            answer:   c[idx.a]       ? c[idx.a].trim()       : '',
+            topic:    c[idx.topic]   ? c[idx.topic].trim()   : '',
+            subject:  c[idx.subj]    ? c[idx.subj].trim()    : '',
+            verify:   interpretVerify(c[idx.verify]),
+            created:  c[idx.created] ? c[idx.created].trim() : ''
+          });
+        }
+      }
+
+      state.factsLoaded = true;
+      state.factsLoading = false;
+      if (cb) cb();
+    } catch (e) {
+      state.factsLoading = false;
+      ui.factsList.innerHTML = '<div class="empty error">Failed to load facts. Tap the refresh icon and try again.</div>';
+    }
+  }
+
+  function factMatches(f, query) {
+    if (!query) return true;
+    const nq = query.toLowerCase();
+    if (f.question && f.question.toLowerCase().indexOf(nq) !== -1) return true;
+    if (f.answer && f.answer.toLowerCase().indexOf(nq) !== -1) return true;
+    if (f.topic && f.topic.toLowerCase().indexOf(nq) !== -1) return true;
+    if (f.subject && f.subject.toLowerCase().indexOf(nq) !== -1) return true;
+    return false;
+  }
+
+  function renderFacts() {
+    if (!state.factsLoaded) {
+      if (!state.factsLoading) loadFacts(renderFacts);
+      return;
+    }
+
+    if (!state.facts.length) {
+      ui.factsList.innerHTML = '<div class="empty">No facts available</div>';
+      ui.factsCount.textContent = '';
+      return;
+    }
+
+    const limit = state.isGuest ? Math.min(state.facts.length, GUEST_LIMIT) : state.facts.length;
+    let html = '';
+    let shown = 0;
+
+    for (let i = 0; i < limit; i++) {
+      const f = state.facts[i];
+      if (!factMatches(f, state.factsQuery)) continue;
+      shown++;
+
+      const key = String(f.srno || f.question).trim();
+      const isRead = state.factsReadSet.has(key);
+      const hasAnswer = f.answer && f.answer.trim() !== '';
+
+      let statusLabel = '<span class="fact-status unverified">Unverified</span>';
+      if (f.verify === 'true') statusLabel = '<span class="fact-status verified">Verified</span>';
+      else if (f.verify === 'unknown') statusLabel = '<span class="fact-status unknown">Not checked</span>';
+
+      const metaChips = [];
+      if (f.subject) metaChips.push('<span class="fm">' + escapeHtml(titleCase(f.subject)) + '</span>');
+      if (f.topic)   metaChips.push('<span class="fm">' + escapeHtml(titleCase(f.topic)) + '</span>');
+
+      html +=
+        '<div class="fact' + (isRead ? ' read' : '') + '" data-idx="' + i + '" data-key="' + escapeHtml(key) + '">' +
+          '<div class="fact-head">' +
+            '<span class="f-num">' + escapeHtml(f.srno) + '</span>' +
+            '<span class="f-q">' + escapeHtml(f.question) + '</span>' +
+          '</div>' +
+          statusLabel +
+          '<div class="fact-body">' +
+            '<strong>Answer:</strong> ' +
+            (hasAnswer
+              ? escapeHtml(f.answer)
+              : '<span class="ans-empty">Not provided</span>') +
+          '</div>' +
+          (metaChips.length ? '<div class="fact-meta">' + metaChips.join('') + '</div>' : '') +
+        '</div>';
+    }
+
+    if (shown === 0) {
+      ui.factsList.innerHTML = '<div class="empty">No facts match "' + escapeHtml(state.factsQuery) + '"</div>';
+      ui.factsCount.textContent = '0';
+    } else {
+      ui.factsList.innerHTML = html;
+
+      const readCount = countReadFacts(limit);
+      ui.factsCount.textContent = state.factsQuery
+        ? shown + ' found'
+        : readCount + ' of ' + limit + ' read';
+
+      ui.factsList.querySelectorAll('.fact').forEach((card) => {
+        card.addEventListener('click', () => {
+          const i = parseInt(card.dataset.idx, 10);
+          const f = state.facts[i];
+          if (!f) return;
+
+          const key = String(f.srno || f.question).trim();
+          if (!state.factsReadSet.has(key)) {
+            state.factsReadSet.add(key);
+            saveFactsReadSet();
+            card.classList.add('read');
+            const limit2 = state.isGuest ? Math.min(state.facts.length, GUEST_LIMIT) : state.facts.length;
+            const rc = countReadFacts(limit2);
+            if (!state.factsQuery) ui.factsCount.textContent = rc + ' of ' + limit2 + ' read';
+          }
+          openSearch(f.question, f.subject, f.topic);
+        });
+      });
+    }
+
+    ui.factsSearchBar.classList.toggle('has-text', ui.factsSearch.value.length > 0);
+  }
+
+  function countReadFacts(limit) {
+    let n = 0;
+    for (let i = 0; i < limit; i++) {
+      const f = state.facts[i];
+      if (!f) continue;
+      const key = String(f.srno || f.question).trim();
+      if (state.factsReadSet.has(key)) n++;
+    }
+    return n;
+  }
+
+  ui.factsSearch.addEventListener('input', () => {
+    state.factsQuery = ui.factsSearch.value.trim();
+    renderFacts();
+  });
+  ui.factsSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      ui.factsSearch.value = '';
+      state.factsQuery = '';
+      renderFacts();
+      ui.factsSearch.blur();
+    }
+  });
+  ui.factsClear.addEventListener('click', () => {
+    ui.factsSearch.value = '';
+    state.factsQuery = '';
+    renderFacts();
+    ui.factsSearch.focus();
+  });
+
+  /* ============================================================
+     PAPERS MODE (iframe)
+     ============================================================ */
+  function ensurePapersLoaded() {
+    if (state.papersLoaded) return;
+    const src = ui.papersFrame.getAttribute('data-src');
+    if (src) {
+      ui.papersFrame.src = src;
+      state.papersLoaded = true;
+    }
+  }
+
+  /* ============================================================
+     MODE MENU
+     ============================================================ */
+  ui.modeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ui.modeDrop.classList.toggle('open');
+  });
+  ui.modeMenu.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setMode(btn.dataset.mode);
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!ui.modeDrop.contains(e.target)) ui.modeDrop.classList.remove('open');
+  });
+
+  /* ============================================================
+     PREV / NEXT / END / RESTART
+     ============================================================ */
+  ui.prevBtn.addEventListener('click', () => {
+    if (state.current > 0) {
+      state.current--;
+      renderQuestion();
+      renderDots(state.current);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  ui.nextBtn.addEventListener('click', () => {
+    if (state.isGuest && state.current >= GUEST_LIMIT - 1) {
+      promptGuestLimit();
+      return;
+    }
+    if (state.current < state.total - 1) {
+      state.current++;
+      renderQuestion();
+      renderDots(state.current);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  ui.endBtn.addEventListener('click', async () => {
+    if (state.finished) return;
+    const unanswered = state.total - attemptedCount();
+    const ok = await confirmDialog({
+      title: 'End quiz?',
+      message: unanswered > 0
+        ? unanswered + ' question' + (unanswered !== 1 ? 's' : '') + ' left unanswered.'
+        : 'You answered all questions.',
+      okText: 'End quiz',
+      danger: false
+    });
+    if (!ok) return;
+    if (!state.submitted) gradeQuiz();
+    showResult();
+  });
+
+  ui.restartBtn.addEventListener('click', () => {
+    if (state.isGuest) { promptGuestLimit(); return; }
+    restartQuiz();
+  });
+
+  /* ============================================================
+     REFRESH
+     ============================================================ */
+  ui.refreshBtn.addEventListener('click', async () => {
+    const ok = await confirmDialog({
+      title: 'Reload questions?',
+      message: 'Your current progress will be lost.',
+      okText: 'Reload',
+      danger: true
+    });
+    if (!ok) return;
+
+    // Reset facts so next visit reloads fresh
+    state.factsLoaded = false;
+    fetchQuestions(true);
+  });
+
+  /* ============================================================
+     DRAWER (filters)
+     ============================================================ */
+  function openDrawer() {
+    rebuildFilterLists();
+    ui.drawerBackdrop.classList.add('show');
+    ui.drawer.classList.add('open');
+    ui.drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    ui.drawerBackdrop.classList.remove('show');
+    ui.drawer.classList.remove('open');
+    ui.drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  ui.drawerBtn.addEventListener('click', openDrawer);
+  ui.drawerClose.addEventListener('click', closeDrawer);
+  ui.drawerBackdrop.addEventListener('click', closeDrawer);
+
+  ui.drawerReset.addEventListener('click', () => {
+    state.selJobs = [];
+    state.selSubjs = [];
+    rebuildFilterLists();
+    toast('Filters cleared', 'info', 2000);
+  });
+
+  ui.drawerApply.addEventListener('click', () => {
+    closeDrawer();
+    fetchQuestions(true);
+  });
+
+  /* ============================================================
+     JOB SITES MODAL
+     ============================================================ */
+  async function loadJobSites() {
+    if (state.jobSitesLoaded) { renderJobSites(); return; }
+    if (state.jobSitesLoading) return;
+    state.jobSitesLoading = true;
+
+    ui.sitesList.innerHTML = '<div class="empty">Loading…</div>';
+
+    try {
+      const url = JOBSITES_URL + (JOBSITES_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const lines = text.split('\n').filter((l) => l.trim());
+
+      state.jobSites = [];
+
+      if (lines.length >= 2) {
+        const headers = parseLine(lines[0]).map((h) => h.toLowerCase().trim());
+        const find = (keys, fallback) => {
+          for (let k = 0; k < headers.length; k++) {
+            const h = headers[k];
+            if (keys.some((kw) => h.indexOf(kw) !== -1)) return k;
+          }
+          return fallback;
+        };
+
+        const idx = {
+          srno:   find(['srno', 'sr no', 's.no', 'serial'], 0),
+          sector: find(['sector'], 1),
+          name:   find(['name of job', 'name', 'website'], 2),
+          url:    find(['url', 'link'], 3)
+        };
+
+        for (let i = 1; i < lines.length; i++) {
+          const c = parseLine(lines[i]);
+          if (!c.length) continue;
+          const name = c[idx.name] ? c[idx.name].trim() : '';
+          if (!name) continue;
+          state.jobSites.push({
+            srno:   c[idx.srno]   ? c[idx.srno].trim()   : String(i),
+            sector: c[idx.sector] ? c[idx.sector].trim() : '',
+            name,
+            url:    c[idx.url]    ? c[idx.url].trim()    : ''
+          });
+        }
+      }
+
+      state.jobSitesLoaded = true;
+      state.jobSitesLoading = false;
+      renderJobSites();
+    } catch (e) {
+      state.jobSitesLoading = false;
+      ui.sitesList.innerHTML = '<div class="empty error">Failed to load job websites.</div>';
+    }
+  }
+
+  function renderJobSites() {
+    if (!state.jobSites.length) {
+      ui.sitesList.innerHTML = '<div class="empty">No job websites available</div>';
+      return;
+    }
+
+    const q = state.jobSitesQuery.toLowerCase();
+    const items = state.jobSites.filter((s) => {
+      if (!q) return true;
+      return (s.sector && s.sector.toLowerCase().indexOf(q) !== -1) ||
+             (s.name && s.name.toLowerCase().indexOf(q) !== -1) ||
+             (s.url && s.url.toLowerCase().indexOf(q) !== -1);
+    });
+
+    if (!items.length) {
+      ui.sitesList.innerHTML = '<div class="empty">No matches for "' + escapeHtml(state.jobSitesQuery) + '"</div>';
+      return;
+    }
+
+    let html = '';
+    items.forEach((s) => {
+      let displayUrl = s.url;
+      try { displayUrl = new URL(s.url).hostname; } catch (e) { /* ignore */ }
+
+      html +=
+        '<div class="site">' +
+          '<span class="s-num">' + escapeHtml(s.srno) + '</span>' +
+          (s.sector ? '<span class="s-sector">' + escapeHtml(s.sector) + '</span>' : '') +
+          '<span class="s-name">' + escapeHtml(s.name) + '</span>' +
+          (s.url
+            ? '<a class="s-url" href="' + escapeHtml(s.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(displayUrl) + '</a>'
+            : '') +
+        '</div>';
+    });
+
+    ui.sitesList.innerHTML = html;
+  }
+
+  function openSites() {
+    ui.sitesBackdrop.classList.add('show');
+    ui.sitesModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    loadJobSites();
+  }
+  function closeSites() {
+    ui.sitesBackdrop.classList.remove('show');
+    ui.sitesModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  ui.jobSitesBtn.addEventListener('click', openSites);
+  ui.sitesClose.addEventListener('click', closeSites);
+  ui.sitesBackdrop.addEventListener('click', closeSites);
+  ui.sitesSearch.addEventListener('input', () => {
+    state.jobSitesQuery = ui.sitesSearch.value.trim();
+    renderJobSites();
+  });
+
+  /* ============================================================
+     LOGOUT
+     ============================================================ */
+  async function doLogout() {
+    const ok = await confirmDialog({
+      title: 'Sign out?',
+      message: 'Your quiz progress will not be saved.',
+      okText: 'Sign out',
+      danger: true
+    });
+    if (!ok) return;
+    triggerLogout();
+  }
+
+  function triggerLogout() {
+    stopTimer();
+    closeDrawer();
+    closeSites();
+    ui.confirmBackdrop.classList.remove('show');
+    ui.modeDrop.classList.remove('open');
+    document.body.style.overflow = '';
+
+    try {
+      localStorage.removeItem(KEY_USER);
+      localStorage.removeItem(KEY_QUIZ);
+      localStorage.removeItem(KEY_MODE);
+      localStorage.removeItem(KEY_FACTS_READ);
+    } catch (e) { /* ignore */ }
+
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'SL_LOGOUT' }, '*');
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  ui.logoutBtn.addEventListener('click', doLogout);
+
+  /* ============================================================
+     USER LABELS
+     ============================================================ */
+  function applyUser() {
+    const name = state.user ? state.user.user : 'User';
+    const initial = name ? name.charAt(0).toUpperCase() : 'U';
+    ui.userAvatar.textContent = initial;
+    ui.userName.textContent = name;
+    updateSubtitle();
+  }
+
+  /* ============================================================
+     INSTALL BANNER
+     ============================================================ */
+  function shouldShowInstall() {
+    try {
+      const dismissed = localStorage.getItem(KEY_INSTALL_HIDE);
+      if (!dismissed) return true;
+      const dayMs = 24 * 60 * 60 * 1000;
+      return (Date.now() - parseInt(dismissed, 10)) > dayMs;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function showInstall() {
+    if (shouldShowInstall()) {
+      setTimeout(() => ui.installBanner.classList.add('show'), 1500);
+    }
+  }
+
+  function hideInstall(persist) {
+    ui.installBanner.classList.remove('show');
+    if (persist) {
+      try { localStorage.setItem(KEY_INSTALL_HIDE, String(Date.now())); } catch (e) { /* ignore */ }
+    }
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    state.deferredPrompt = e;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    hideInstall(true);
+    toast('App installed', 'success', 2500);
+  });
+
+  ui.installClose.addEventListener('click', () => hideInstall(true));
+
+  ui.installBanner.addEventListener('click', (e) => {
+    if (e.target === ui.installClose || ui.installClose.contains(e.target)) return;
+    if (state.deferredPrompt) {
+      state.deferredPrompt.prompt();
+      state.deferredPrompt.userChoice.then((res) => {
+        if (res.outcome === 'accepted') hideInstall(true);
+        state.deferredPrompt = null;
+      });
+    } else {
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+      const isAndroid = /Android/.test(ua);
+      let msg = 'To install:\n\n';
+      if (isIOS) msg += '1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Tap "Add"';
+      else if (isAndroid) msg += '1. Tap the browser menu\n2. Tap "Install app" or "Add to Home screen"';
+      else msg += '1. Look for the install icon in the address bar\n2. Or use the browser menu and choose "Install"';
+      alert(msg);
+    }
+  });
+
+  /* ============================================================
+     KEYBOARD
+     ============================================================ */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (ui.confirmBackdrop.classList.contains('show')) { closeConfirm(false); return; }
+      if (ui.sitesModal.classList.contains('show')) { closeSites(); return; }
+      if (ui.drawer.classList.contains('open')) { closeDrawer(); return; }
+      if (ui.modeDrop.classList.contains('open')) { ui.modeDrop.classList.remove('open'); return; }
+    }
+    if (state.mode !== 'mcq' || state.finished) return;
+    if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].indexOf(document.activeElement.tagName) !== -1) return;
+    if (e.key === 'ArrowLeft' && !ui.prevBtn.disabled) ui.prevBtn.click();
+    else if (e.key === 'ArrowRight' && !ui.nextBtn.disabled) ui.nextBtn.click();
+  });
+
+  /* ============================================================
+     postMessage FROM PARENT
+     ============================================================ */
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d || typeof d !== 'object') return;
+
+    if (d.type === 'SL_USER') {
+      state.user = d.user || null;
+      state.isGuest = !!d.isGuest;
+      applyUser();
+
+      // Fresh login — clear any stale overlay state
+      closeDrawer();
+      closeSites();
+      ui.confirmBackdrop.classList.remove('show');
+      ui.modeDrop.classList.remove('open');
+      document.body.style.overflow = '';
+    } else if (d.type === 'SL_SET_MODE') {
+      setMode(d.mode, true);
+    } else if (d.type === 'SL_FORCE_CLOSE_OVERLAYS') {
+      closeDrawer();
+      closeSites();
+      ui.confirmBackdrop.classList.remove('show');
+      ui.modeDrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init() {
+    // Restore facts read set
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY_FACTS_READ) || '[]');
+      state.factsReadSet = new Set(saved);
+    } catch (e) {
+      state.factsReadSet = new Set();
+    }
+
+    // Restore user
+    try {
+      const u = JSON.parse(localStorage.getItem(KEY_USER) || 'null');
+      if (u) {
+        state.user = u;
+        state.isGuest = u.user === 'Guest';
+      }
+    } catch (e) { /* ignore */ }
+
+    applyUser();
+    showInstall();
+
+    // Restore last mode
+    let savedMode = 'mcq';
+    try {
+      const m = localStorage.getItem(KEY_MODE);
+      if (m && MODE_META[m]) savedMode = m;
+    } catch (e) { /* ignore */ }
+
+    // Fetch questions; setMode after so views line up
+    fetchQuestions(false).then(() => {
+      setMode(savedMode, true);
+    });
+  }
+
+  // Kick off once DOM is ready (script is at end of body, so it already is)
+  init();
+})();
+</script>
+</body>
+</html>
