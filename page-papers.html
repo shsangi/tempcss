@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e6fd9">
+<title>Past papers · Self Learners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --primary:#1e6fd9; --primary-dark:#1857ab; --primary-soft:#e8f1fc;
+    --bg:#f7f8fa; --surface:#ffffff; --surface-alt:#f1f3f7;
+    --border:#e3e6ec; --border-strong:#cfd4dd;
+    --text:#1a1d23; --text-secondary:#5a6472; --text-muted:#8b95a5;
+    --success:#0d8a5a; --success-soft:#e3f5ed;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
+    --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+    --shadow-md:0 2px 8px rgba(16,24,40,.08);
+  }
+  html, body { -webkit-text-size-adjust:100%; }
+  body {
+    font:400 14px/1.5 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  .page { width: 100%; max-width: 900px; }
+
+  /* ---------- Lock screen (guest) ---------- */
+  .lock {
+    max-width: 420px;
+    margin: 40px auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 32px 24px 28px;
+    text-align: center;
+    display: none;
+  }
+  .lock.show { display: block; }
+  .lock-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 16px;
+    background: var(--primary-soft);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--primary);
+  }
+  .lock-icon svg {
+    width: 26px; height: 26px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .lock h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .lock p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .lock-features {
+    text-align: left;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    margin-bottom: 22px;
+  }
+  .lock-features li {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .lock-features li::before {
+    content: "•";
+    color: var(--primary);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .lock .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 16px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .lock .btn:hover { background: var(--primary-dark); text-decoration: none; }
+
+  /* ---------- Main content ---------- */
+  .content { display: none; }
+  .content.show { display: block; }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-bottom: 14px;
+  }
+  .head h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .head .stats {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .head .stats b {
+    color: var(--text);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Filters ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .filters input[type="text"] {
+    flex: 1 1 220px;
+    min-height: 44px;
+    padding: 10px 12px 10px 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    color: var(--text);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b95a5' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+  }
+  .filters input[type="text"]:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+  .filters select {
+    flex: 0 1 auto;
+    min-height: 44px;
+    padding: 10px 34px 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6472' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    cursor: pointer;
+    min-width: 130px;
+  }
+  .filters select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+  }
+
+  /* ---------- Cards grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 640px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.primary {
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .card-subject {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .urdu {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-secondary);
+    direction: rtl;
+    text-align: right;
+    padding: 8px 0;
+    border-top: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
+    font-family: 'Noto Nastaliq Urdu', 'Inter', system-ui, sans-serif;
+    word-break: break-word;
+  }
+  .urdu:empty { display: none; }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .action {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 12px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .action-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .action-primary:hover { background: var(--primary-dark); text-decoration: none; }
+  .action-disabled {
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+  .action-ghost {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .action-ghost:hover { border-color: var(--primary); color: var(--primary); text-decoration: none; }
+  .action-ghost .arrow {
+    display: inline-block;
+    transition: transform .2s;
+    margin-left: 4px;
+    font-size: 10px;
+  }
+  .action-ghost.open .arrow { transform: rotate(180deg); }
+
+  /* ---------- Expandable details ---------- */
+  .details {
+    display: none;
+    background: var(--surface-alt);
+    border-radius: var(--r-sm);
+    padding: 4px 12px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .details.open { display: block; }
+  .details .row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .details .row:last-child { border-bottom: 0; }
+  .details .label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-top: 2px;
+  }
+  .details .value {
+    color: var(--text);
+    word-break: break-word;
+    line-height: 1.55;
+  }
+  .details .value a {
+    word-break: break-all;
+    font-size: 11px;
+  }
+
+  /* ---------- States ---------- */
+  .state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+  .state.error { color: #c8352e; }
+  .spinner {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    vertical-align: -3px;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    body { padding: 12px; }
+    .card { padding: 14px; }
+    .head h1 { font-size: 16px; }
+    .details .row { grid-template-columns: 76px 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ LOCK SCREEN ============ -->
+  <div class="lock" id="lockScreen">
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    </div>
+    <h2>Sign in to view past papers</h2>
+    <p>Solved FPSC past papers are available to registered members.</p>
+
+    <ul class="lock-features">
+      <li>Complete solved essay papers archive</li>
+      <li>Filter by year, subject and topic</li>
+      <li>Urdu meanings with full exam context</li>
+      <li>Direct links to AI-solved answers</li>
+    </ul>
+
+    <button class="btn" id="lockLoginBtn">Sign in</button>
+  </div>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <div class="content" id="content">
+    <div class="head">
+      <h1>FPSC solved papers</h1>
+      <div class="stats">
+        <span>Total <b id="statTotal">0</b></span>
+        <span>Years <b id="statYears">0</b></span>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search past papers…" autocomplete="off" autocapitalize="off">
+      <select id="yearFilter"><option value="">All years</option></select>
+      <select id="subjectFilter"><option value="">All subjects</option></select>
+      <select id="topicFilter"><option value="">All topics</option></select>
+    </div>
+
+    <div class="grid" id="grid">
+      <div class="state"><span class="spinner"></span>Loading past papers…</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTarve67hHynjJ0GzHY4IUl5ip1GnDgc2kyRyun5psdUN2IeSUcktBWWl7qEVFmMEM9x4TiPIyrcLzh/pub?output=csv';
+
+  const lockScreen   = document.getElementById('lockScreen');
+  const content      = document.getElementById('content');
+  const lockLoginBtn = document.getElementById('lockLoginBtn');
+  const grid         = document.getElementById('grid');
+  const searchInput  = document.getElementById('searchInput');
+  const yearFilter   = document.getElementById('yearFilter');
+  const subjectFilter = document.getElementById('subjectFilter');
+  const topicFilter  = document.getElementById('topicFilter');
+  const statTotal    = document.getElementById('statTotal');
+  const statYears    = document.getElementById('statYears');
+
+  let allPapers = [];
+  let filteredPapers = [];
+  let hasLoaded = false;
+
+  /* ---------- Auth ---------- */
+  function getUser() {
+    try {
+      const u = JSON.parse(localStorage.getItem('slUser') || 'null');
+      if (!u) return null;
+      if (u.user === 'Guest') return { user: 'Guest', isGuest: true };
+      return { user: u.user, pass: u.pass, isGuest: false };
+    } catch (e) { return null; }
+  }
+
+  function isMember() {
+    const u = getUser();
+    return u && !u.isGuest;
+  }
+
+  function showLock() {
+    lockScreen.classList.add('show');
+    content.classList.remove('show');
+  }
+
+  function showContent() {
+    lockScreen.classList.remove('show');
+    content.classList.add('show');
+    if (!hasLoaded) {
+      hasLoaded = true;
+      init();
+    }
+  }
+
+  /* ---------- Login prompt (post to parent) ---------- */
+  lockLoginBtn.addEventListener('click', () => {
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'SL_LOGOUT' }, '*');
+      } else {
+        window.location.href = 'page-login.html';
+      }
+    } catch (e) {
+      window.location.href = 'page-login.html';
+    }
+  });
+
+  /* ---------- CSV ---------- */
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"') {
+        if (inQuotes && next === '"') { cell += '"'; i++; }
+        else inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        row.push(cell); cell = '';
+      } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+        if (ch === '\r' && next === '\n') i++;
+        if (cell !== '' || row.length > 0) {
+          row.push(cell);
+          rows.push(row);
+          row = []; cell = '';
+        }
+      } else {
+        cell += ch;
+      }
+    }
+    if (cell !== '' || row.length > 0) {
+      row.push(cell);
+      rows.push(row);
+    }
+    return rows.filter((r) => r.some((c) => c.trim() !== ''));
+  }
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function isValidLink(v) {
+    if (!v) return false;
+    const t = v.trim();
+    return t !== '' && t !== '#' && /^https?:\/\//i.test(t);
+  }
+
+  /* ---------- Build paper objects from CSV rows ---------- */
+  function buildPapers(rows) {
+    if (rows.length < 2) return [];
+    const headers = rows[0].map((h) => h.trim().toLowerCase());
+    const data = rows.slice(1);
+
+    const idx = {
+      srno:      headers.findIndex((h) => /srno|sr no/.test(h)),
+      examTitle: headers.findIndex((h) => /title of exam/.test(h)),
+      instr:     headers.findIndex((h) => /instruction/.test(h)),
+      year:      headers.findIndex((h) => /year/.test(h) && !/urdu/.test(h)),
+      category:  headers.findIndex((h) => /category/.test(h)),
+      topic:     headers.findIndex((h) => /essay topic|question/.test(h)),
+      urdu:      headers.findIndex((h) => /urdu_meaning|urdu meaning/.test(h)),
+      subject:   headers.findIndex((h) => /paper_subject|paper subject/.test(h)),
+      req:       headers.findIndex((h) => /requirement/.test(h)),
+      solution:  headers.findIndex((h) => /solution|ref|link/.test(h))
+    };
+
+    const get = (r, i, fallback) => {
+      if (i === -1 || i >= r.length || r[i] === undefined) return fallback || '';
+      return String(r[i]).trim();
+    };
+
+    const out = [];
+    data.forEach((r, i) => {
+      if (!r.some((c) => c.trim() !== '')) return;
+      const topic = get(r, idx.topic, '');
+      if (!topic || topic === 'Untitled essay') return;
+
+      const sol = get(r, idx.solution, '');
+      out.push({
+        srno:      get(r, idx.srno, String(i + 1)),
+        examTitle: get(r, idx.examTitle, 'FPSC Competitive Examination'),
+        instr:     get(r, idx.instr, ''),
+        year:      get(r, idx.year, ''),
+        category:  get(r, idx.category, 'General'),
+        topic,
+        urdu:      get(r, idx.urdu, ''),
+        subject:   get(r, idx.subject, 'General'),
+        req:       get(r, idx.req, ''),
+        solution:  sol,
+        hasLink:   isValidLink(sol)
+      });
+    });
+    return out;
+  }
+
+  /* ---------- Render ---------- */
+  function renderCards(papers) {
+    if (!papers.length) {
+      grid.innerHTML = '<div class="state">No past papers match your search.</div>';
+      return;
+    }
+
+    let html = '';
+
+    papers.forEach((p, i) => {
+      const detailsId = 'd' + i + '_' + Math.random().toString(36).slice(2, 8);
+
+      const chips = [];
+      if (p.srno)    chips.push('<span class="chip">#' + escapeHtml(p.srno) + '</span>');
+      if (p.year)    chips.push('<span class="chip primary">' + escapeHtml(p.year) + '</span>');
+      if (p.subject) chips.push('<span class="chip">' + escapeHtml(p.subject) + '</span>');
+
+      const urduBlock = p.urdu
+        ? '<div class="urdu">' + escapeHtml(p.urdu) + '</div>'
+        : '';
+
+      const primaryBtn = p.hasLink
+        ? '<a class="action action-primary" href="' + escapeHtml(p.solution) + '" target="_blank" rel="noopener noreferrer">View solution</a>'
+        : '<span class="action action-disabled">No solution</span>';
+
+      const detailsHtml =
+        '<div class="details" id="' + detailsId + '">' +
+          row('Exam',      p.examTitle) +
+          row('Category',  p.category) +
+          row('Subject',   p.subject) +
+          row('Requirement', p.req || '—') +
+          row('Year',      p.year) +
+          row('Instruction', p.instr || '—') +
+          row('Solution',  p.hasLink
+            ? '<a href="' + escapeHtml(p.solution) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(p.solution) + '</a>'
+            : (p.solution ? escapeHtml(p.solution) : 'Not available')) +
+        '</div>';
+
+      html +=
+        '<div class="card">' +
+          '<div class="card-meta">' + chips.join('') + '</div>' +
+          '<div class="card-title">' + escapeHtml(p.topic) + '</div>' +
+          urduBlock +
+          '<div class="card-actions">' +
+            primaryBtn +
+            '<button class="action action-ghost" data-details="' + detailsId + '">' +
+              'Details <span class="arrow">▾</span>' +
+            '</button>' +
+          '</div>' +
+          detailsHtml +
+        '</div>';
+    });
+
+    grid.innerHTML = html;
+
+    // Wire detail expanders
+    grid.querySelectorAll('[data-details]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const el = document.getElementById(btn.getAttribute('data-details'));
+        if (!el) return;
+        const isOpen = el.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+      });
+    });
+  }
+
+  function row(label, value) {
+    return '<div class="row">' +
+             '<span class="label">' + escapeHtml(label) + '</span>' +
+             '<span class="value">' + value + '</span>' +
+           '</div>';
+  }
+
+  /* ---------- Filters ---------- */
+  function applyFilters() {
+    const q = searchInput.value.trim().toLowerCase();
+    const year = yearFilter.value;
+    const subject = subjectFilter.value;
+    const topic = topicFilter.value;
+
+    filteredPapers = allPapers.filter((p) => {
+      if (year && p.year !== year) return false;
+      if (subject && p.subject !== subject) return false;
+      if (topic && p.topic !== topic) return false;
+      if (!q) return true;
+
+      const hay = [p.topic, p.urdu, p.category, p.subject, p.req, p.year, p.srno, p.examTitle, p.solution]
+        .join(' ').toLowerCase();
+      return hay.indexOf(q) !== -1;
+    });
+
+    renderCards(filteredPapers);
+  }
+
+  function populateFilters(papers) {
+    const years = [...new Set(papers.map((p) => p.year).filter(Boolean))].sort((a, b) => b.localeCompare(a));
+    const subjects = [...new Set(papers.map((p) => p.subject).filter(Boolean))].sort();
+    const topics = [...new Set(papers.map((p) => p.topic).filter(Boolean))].sort();
+
+    yearFilter.innerHTML = '<option value="">All years</option>';
+    years.forEach((y) => {
+      const o = document.createElement('option');
+      o.value = y; o.textContent = y;
+      yearFilter.appendChild(o);
+    });
+
+    subjectFilter.innerHTML = '<option value="">All subjects</option>';
+    subjects.forEach((s) => {
+      const o = document.createElement('option');
+      o.value = s; o.textContent = s;
+      subjectFilter.appendChild(o);
+    });
+
+    topicFilter.innerHTML = '<option value="">All topics</option>';
+    topics.forEach((t) => {
+      const o = document.createElement('option');
+      o.value = t;
+      o.textContent = t.length > 42 ? t.slice(0, 40) + '…' : t;
+      o.title = t;
+      topicFilter.appendChild(o);
+    });
+
+    statTotal.textContent = papers.length;
+    statYears.textContent = years.length;
+  }
+
+  /* ---------- Init ---------- */
+  async function init() {
+    try {
+      const url = CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + '_t=' + Date.now();
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const text = await r.text();
+      const parsed = parseCSV(text);
+      if (parsed.length < 2) throw new Error('No data rows');
+
+      allPapers = buildPapers(parsed);
+      if (!allPapers.length) throw new Error('No valid entries');
+
+      populateFilters(allPapers);
+      filteredPapers = [...allPapers];
+      renderCards(filteredPapers);
+
+      searchInput.addEventListener('input', applyFilters);
+      yearFilter.addEventListener('change', applyFilters);
+      subjectFilter.addEventListener('change', applyFilters);
+      topicFilter.addEventListener('change', applyFilters);
+    } catch (e) {
+      grid.innerHTML = '<div class="state error">Failed to load past papers. Check your connection and refresh.</div>';
+    }
+  }
+
+  /* ---------- Initial routing ---------- */
+  if (isMember()) {
+    showContent();
+  } else {
+    showLock();
+  }
+
+  /* Re-check auth on focus (user may have signed in on the login screen) */
+  window.addEventListener('focus', () => {
+    if (isMember() && !hasLoaded) showContent();
+  });
+
+  /* Re-check on storage events from sibling frames */
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'slUser' && isMember() && !hasLoaded) showContent();
+  });
+
+  /* Listen for SL_USER postMessage from parent — this is the reliable path */
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'SL_USER') {
+      if (d.user && !d.isGuest && !hasLoaded) {
+        showContent();
+      } else if ((!d.user || d.isGuest) && hasLoaded === false) {
+        showLock();
+      }
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
